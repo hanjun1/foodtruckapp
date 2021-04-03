@@ -7,16 +7,44 @@ class User(AbstractUser):
     class Types(models.TextChoices):
         Eater = "Eater"
         Owner = "Owner"
-
+    # sets type of user
     type = models.CharField(_("Type"), max_length=50, choices=Types.choices, default=Types.Eater)
 
+    name = models.CharField(_("Name of User"), blank=True, max_length=255)
+
+    def get_absolute_url(self):
+        return reverse("users:detail", kwargs={"username": self.username})
+
+class EaterManager(models.Manager):
+    def get_queryset(self, *args, **kwargs):
+        return super().get_queryset(*args, **kwargs).filter(type=User.Types.Eater)
+
+class OwnerManager(models.Manager):
+    def get_queryset(self, *args, **kwargs):
+        return super().get_queryset(*args, **kwargs).filter(type=User.Types.Owner)
+
 class Eater(User):
+    objects = EaterManager()
+
     class Meta:
         proxy = True
+    # ensures new users are only set to Eater
+    def save(self, *args, **kwargs):
+        if not self.pk
+            self.type = User.Types.Eater
+        return super().save(*args, **kwargs)
 
 class Owner(User):
+    objects = OwnerManager
+
     class Meta:
         proxy = True
+    # ensures new users are only set to Owner
+    def save(self, *args, **kwargs):
+        if not self.pk
+            self.type = User.Types.Owner
+        return super().save(*args, **kwargs)
+
 
 class Truck(models.Model):
     name: models.CharField(max_length=100)
