@@ -1,11 +1,13 @@
 {% extends 'base.html' %}
 {% block content %}
 
+<p>Search results for "{{ message }}"...</p>
 <form action="{% url 'results' %}" method="GET">
     {% csrf_token %}
     <label>Find a food project</label> <br>
     <input type="text" name="search"> <br>
     <button>Search</button>
 </form>
+
 
 {% endblock %}
