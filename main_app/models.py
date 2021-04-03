@@ -1,5 +1,22 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
+from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
+
+class User(AbstractUser):
+    class Types(models.TextChoices):
+        Eater = "Eater"
+        Owner = "Owner"
+
+    type = models.CharField(_("Type"), max_length=50, choices=Types.choices, default=Types.Eater)
+
+class Eater(User):
+    class Meta:
+        proxy = True
+
+class Owner(User):
+    class Meta:
+        proxy = True
 
 class Truck(models.Model):
     name: models.CharField(max_length=100)
