@@ -4,11 +4,12 @@
 <h1>Log In</h1>
 
 <form method="post" action="{% url 'login' %}">
-    {% csrf_token %}
-    Username: <input name="username">
-    Password: <input name="password">
-    <input type="submit" value="login">
-    <input type="hidden" name="next" value="{{ next }}">
-  </form>
-  
+  {% csrf_token %}
+  <!-- Username: <input name="username">
+    Password: <input name="password"> -->
+  {{ form.as_p }}
+  <input type="submit" value="login">
+  <input type="hidden" name="next" value="{{ next }}">
+</form>
+
 {% endblock %}

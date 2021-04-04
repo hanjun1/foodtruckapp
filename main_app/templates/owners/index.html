@@ -1,6 +1,9 @@
 {% extends 'base.html'%}
 {% block content %}
 
+{% for t in trucks %}
+<li>{{ t.name }}</li>
+{% endfor %}
 <a href="/owners/new">Add</a>
 
 {% endblock %}

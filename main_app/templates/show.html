@@ -1,14 +1,11 @@
-{% extends 'base.html' %}
+{% extends 'base.html'%}
 {% block content %}
 
+<p>Showing all results in Toronto, ON</p>
 <form action="{% url 'results' %}" method="GET">
     <label>Find a food project</label> <br>
     <input type="text" name="search"> <br>
     <button>Search</button>
-</form>
-
-<form action="{% url 'show_all' %}" method="GET">
-    <button>Show All</button>
 </form>
 
 {% endblock %}
