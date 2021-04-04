@@ -1,0 +1,34 @@
+{% extends 'base.html'%}
+{% block content %}
+
+<hr>
+
+<p>Truck ID: {{ truck.id }}</p>
+<p>Truck Name: {{ truck.name }}</p>
+<p>Truck Description: {{ truck.description }}</p>
+<p>Truck Location: {{ truck.location }}</p>
+
+<hr>
+<h1>Comments</h1>
+{% if user.is_authenticated and user.type == 'Eater' and truck.user != user %}
+<form action="{% url 'create_comment' truck.id %}" method="post">
+    {% csrf_token %}
+    <textarea name="content" cols="30" rows="10" placeholder="Write comment here..."></textarea>
+    <input type="hidden" name="user" value="{{ user }}"> <br>
+    <button>Submit</button>
+</form>
+<hr>
+{% endif %}
+{% if comments %}
+{% for comment in comments %}
+<li>User: {{ comment.user }}</li>
+<li>Date: {{ comment.date }}</li>
+<li>Comment: {{ comment.content }}</li>
+<hr>
+{% endfor %}
+{% else %}
+<p>No comments yet</p>
+
+{% endif %}
+
+{% endblock %}

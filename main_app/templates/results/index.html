@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<p>Search results for "{{ message }}"...</p>
 <form action="{% url 'results' %}" method="GET">
     <label>Find a food project</label> <br>
     <input type="text" name="search"> <br>
@@ -11,5 +10,19 @@
 <form action="{% url 'show_all' %}" method="GET">
     <button>Show All</button>
 </form>
+
+<p>Search results for "{{ name_contains_query }}"...</p>
+
+<hr>
+
+<div>
+    <ul>
+        {% for truck in queryset %}
+        <li>
+            <a href="{% url 'results_show' truck.id %}">{{ truck.name }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
 
 {% endblock %}
