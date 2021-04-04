@@ -77,7 +77,7 @@ WSGI_APPLICATION = 'foodtruckapp.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'foodtruckapp',
+        'NAME': 'strEATfinder',
     }
 }
 

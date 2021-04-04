@@ -6,12 +6,13 @@
 
 <form method="post" action="{% url 'signup' %}">
   {% csrf_token %}
-  Username: <input name="username">
+  <!-- Username: <input name="username">
   Password: <input name="password" type="password">
-  Confirm Password: <input name="password" type="password">
+  Confirm Password: <input name="password" type="password"> -->
   <!-- do we want first and last name? -->
-  Name: <input name="name">
-  E-mail: <input name="email" type="email">
+  <!-- Name: <input name="name"> -->
+  {{ form.as_p }}
+  <!-- E-mail: <input name="email" type="email"> -->
   <input type="submit" value="signup">
 </form>
 
