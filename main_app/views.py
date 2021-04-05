@@ -1,15 +1,18 @@
 from django.shortcuts import render
 
-# Create your views here.
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, get_user_model
+from django.contrib.auth.models import Group
 # from django.contrib.auth.forms import UserCreationForm
 from main_app.forms import CustomUserCreationForm
 from django.contrib.auth import get_user_model
 from django.db.models import Q
 from .models import Truck, Review, Favourite
 from datetime import datetime
+from django.contrib.auth.decorators import login_required
+from .decorators import unauthenticated_user, allowed_users
+
 
 User = get_user_model()
 
@@ -17,6 +20,8 @@ User = get_user_model()
 def home(request):
     return render(request, 'index.html')
 
+def show_all(request):
+    return render(request, 'show.html')
 
 def results(request):
     qs = Truck.objects.all()
@@ -49,7 +54,7 @@ def results_show(request, truck_id):
     }
     return render(request, 'results/show.html', context)
 
-
+@login_required
 def create_review(request, truck_id):
     truck = Truck.objects.get(id=truck_id)
     eater = User.objects.get(username=request.POST.get('user'))
@@ -70,18 +75,21 @@ def create_review(request, truck_id):
         truck.save()
     return redirect('results_show', truck_id=truck_id)
 
-
+@login_required
+@allowed_users(allowed_roles=['Owner'])
 def owners_home(request, owner_id):
     owner = User.objects.get(id=owner_id)
     trucks = Truck.objects.all().filter(user=owner)
     # if owner.type == 'Owner':
     return render(request, 'owners/index.html', {'trucks': trucks})
 
-
+@login_required
+@allowed_users(allowed_roles=['Owner'])
 def owners_new(request):
     return render(request, 'owners/new.html')
 
-
+@login_required
+@allowed_users(allowed_roles=['Eater'])
 def favourites(request, eater_id):
     eater = User.objects.get(id=eater_id)
     favourites = Favourite.objects.all().filter(user=eater)
@@ -91,17 +99,14 @@ def favourites(request, eater_id):
     }
     return render(request, 'users/favourites.html', context)
 
-
+@login_required
+@allowed_users(allowed_roles=['Eater'])
 def favourites_create(request, eater_id):
     eater = User.objects.get(id=eater_id)
     truck_id = request.POST.get('truck_id')
     truck = Truck.objects.get(id=truck_id)
     Favourite.objects.create(user=eater, truck=truck)
     return redirect('results_show', truck_id=truck_id)
-
-
-def show_all(request):
-    return render(request, 'show.html')
 
 
 def signup(request):
@@ -113,9 +118,18 @@ def signup(request):
         if form.is_valid():
             # This will add the user to the database
             user = form.save()
+            if user.type == 'Eater':
+                group = Group.objects.get(name='Eater')
+                user.groups.add(group)
+            else:
+                group = Group.objects.get(name='Owner')
+                user.groups.add(group)
             # This is how we log a user in via code
             login(request, user)
-            return redirect('home')
+            if user.type == 'Owner':
+                return redirect('owners_home')
+            else:
+                return redirect('home')
         else:
             error_message = 'Invalid sign up - try again'
     # A bad POST or a GET request, so render signup.html with an empty form
