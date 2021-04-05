@@ -8,7 +8,7 @@ from django.contrib.auth import login, get_user_model
 from main_app.forms import CustomUserCreationForm
 from django.contrib.auth import get_user_model
 from django.db.models import Q
-from .models import Truck, Rating, Comment
+from .models import Truck, Review, Favourite
 from datetime import datetime
 
 User = get_user_model()
@@ -39,19 +39,35 @@ def results(request):
 
 def results_show(request, truck_id):
     truck = Truck.objects.get(id=truck_id)
-    comments = Comment.objects.all().filter(truck=truck)
+    reviews = Review.objects.all().filter(truck=truck)
+    user = request.user
+    favourite = Favourite.objects.all().filter(user=user, truck=truck)
     context = {
         'truck': truck,
-        'comments': comments,
+        'reviews': reviews,
+        'favourite': favourite
     }
     return render(request, 'results/show.html', context)
 
 
-def create_comment(request, truck_id):
+def create_review(request, truck_id):
     truck = Truck.objects.get(id=truck_id)
     eater = User.objects.get(username=request.POST.get('user'))
-    Comment.objects.create(date=datetime.now(), content=request.POST.get(
+    rating = int(request.POST.get('rating'))
+    Review.objects.create(date=datetime.now(), rating=rating, content=request.POST.get(
         'content'), truck=truck, user=eater)
+    all_reviews = Review.objects.all().filter(truck=truck)
+    if all_reviews:
+        overall_rating = 0
+        count = 0
+        for review in all_reviews:
+            overall_rating += review.rating
+            count += 1
+        overall_rating += rating
+        count += 1
+        overall_rating = overall_rating/count
+        truck.overall_rating = overall_rating
+        truck.save()
     return redirect('results_show', truck_id=truck_id)
 
 
@@ -68,8 +84,20 @@ def owners_new(request):
 
 def favourites(request, eater_id):
     eater = User.objects.get(id=eater_id)
-    # if eater.type == 'Eater':
-    return render(request, 'users/favourites.html', {'eater': eater})
+    favourites = Favourite.objects.all().filter(user=eater)
+    context = {
+        'eater': eater,
+        'favourites': favourites
+    }
+    return render(request, 'users/favourites.html', context)
+
+
+def favourites_create(request, eater_id):
+    eater = User.objects.get(id=eater_id)
+    truck_id = request.POST.get('truck_id')
+    truck = Truck.objects.get(id=truck_id)
+    Favourite.objects.create(user=eater, truck=truck)
+    return redirect('results_show', truck_id=truck_id)
 
 
 def show_all(request):

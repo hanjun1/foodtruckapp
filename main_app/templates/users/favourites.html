@@ -1,7 +1,11 @@
 {% extends 'base.html'%}
 {% block content %}
 
-<h1>My Favourites</h1>
-<p>{{ eater }}</p>
+<h1>{{ eater }}'s Favourites</h1>
+{% for favourite in favourites %}
+<li>
+    <a href="{% url 'results_show' favourite.truck.id %}">{{ favourite.truck.name }}</a>
+</li>
+{% endfor %}
 
 {% endblock %}
