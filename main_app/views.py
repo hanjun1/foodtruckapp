@@ -1,9 +1,9 @@
 from django.shortcuts import render
 
-# Create your views here.
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, get_user_model
+from django.contrib.auth.models import Group
 # from django.contrib.auth.forms import UserCreationForm
 from main_app.forms import CustomUserCreationForm
 from django.contrib.auth import get_user_model
@@ -70,7 +70,8 @@ def create_review(request, truck_id):
         truck.save()
     return redirect('results_show', truck_id=truck_id)
 
-
+# @login_required
+# @allowed_users(allowed_roles=['Owner'])
 def owners_home(request, owner_id):
     owner = User.objects.get(id=owner_id)
     trucks = Truck.objects.all().filter(user=owner)
@@ -113,6 +114,12 @@ def signup(request):
         if form.is_valid():
             # This will add the user to the database
             user = form.save()
+            if user.type == 'Eater':
+                group = Group.objects.get(name='Eater')
+                user.groups.add(group)
+            else:
+                group = Group.objects.get(name='Owner')
+                user.groups.add(group)
             # This is how we log a user in via code
             login(request, user)
             return redirect('home')
