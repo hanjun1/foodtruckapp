@@ -49,7 +49,7 @@ def results_show(request, truck_id):
     }
     return render(request, 'results/show.html', context)
 
-
+@login_required
 def create_review(request, truck_id):
     truck = Truck.objects.get(id=truck_id)
     eater = User.objects.get(username=request.POST.get('user'))
@@ -70,19 +70,21 @@ def create_review(request, truck_id):
         truck.save()
     return redirect('results_show', truck_id=truck_id)
 
-# @login_required
-# @allowed_users(allowed_roles=['Owner'])
+@login_required
+@allowed_users(allowed_roles=['Owner'])
 def owners_home(request, owner_id):
     owner = User.objects.get(id=owner_id)
     trucks = Truck.objects.all().filter(user=owner)
     # if owner.type == 'Owner':
     return render(request, 'owners/index.html', {'trucks': trucks})
 
-
+@login_required
+@allowed_users(allowed_roles=['Owner'])
 def owners_new(request):
     return render(request, 'owners/new.html')
 
-
+@login_required
+@allowed_users(allowed_roles=['Eater'])
 def favourites(request, eater_id):
     eater = User.objects.get(id=eater_id)
     favourites = Favourite.objects.all().filter(user=eater)
@@ -92,7 +94,8 @@ def favourites(request, eater_id):
     }
     return render(request, 'users/favourites.html', context)
 
-
+@login_required
+@allowed_users(allowed_roles=['Eater'])
 def favourites_create(request, eater_id):
     eater = User.objects.get(id=eater_id)
     truck_id = request.POST.get('truck_id')
@@ -122,7 +125,10 @@ def signup(request):
                 user.groups.add(group)
             # This is how we log a user in via code
             login(request, user)
-            return redirect('home')
+            if user.type == 'Owner':
+                return redirect('owners_home')
+            else:
+                return redirect('home')
         else:
             error_message = 'Invalid sign up - try again'
     # A bad POST or a GET request, so render signup.html with an empty form
