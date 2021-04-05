@@ -41,7 +41,10 @@ def results_show(request, truck_id):
     truck = Truck.objects.get(id=truck_id)
     reviews = Review.objects.all().filter(truck=truck)
     user = request.user
-    favourite = Favourite.objects.all().filter(user=user, truck=truck)
+    if user.id != None:
+        favourite = Favourite.objects.all().filter(user=user, truck=truck)
+    else:
+        favourite = None
     context = {
         'truck': truck,
         'reviews': reviews,
@@ -63,8 +66,6 @@ def create_review(request, truck_id):
         for review in all_reviews:
             overall_rating += review.rating
             count += 1
-        overall_rating += rating
-        count += 1
         overall_rating = overall_rating/count
         truck.overall_rating = overall_rating
         truck.save()
@@ -78,7 +79,11 @@ def owners_home(request, owner_id):
     return render(request, 'owners/index.html', {'trucks': trucks})
 
 
-def owners_new(request):
+def owners_new(request, owner_id):
+    return render(request, 'owners/new.html')
+
+
+def owners_create(request, owner_id):
     return render(request, 'owners/new.html')
 
 
