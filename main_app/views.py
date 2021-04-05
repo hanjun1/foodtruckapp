@@ -10,6 +10,9 @@ from django.contrib.auth import get_user_model
 from django.db.models import Q
 from .models import Truck, Review, Favourite
 from datetime import datetime
+from django.contrib.auth.decorators import login_required
+from .decorators import unauthenticated_user, allowed_users
+
 
 User = get_user_model()
 
@@ -17,6 +20,8 @@ User = get_user_model()
 def home(request):
     return render(request, 'index.html')
 
+def show_all(request):
+    return render(request, 'show.html')
 
 def results(request):
     qs = Truck.objects.all()
@@ -102,10 +107,6 @@ def favourites_create(request, eater_id):
     truck = Truck.objects.get(id=truck_id)
     Favourite.objects.create(user=eater, truck=truck)
     return redirect('results_show', truck_id=truck_id)
-
-
-def show_all(request):
-    return render(request, 'show.html')
 
 
 def signup(request):
