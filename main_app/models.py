@@ -57,6 +57,8 @@ class Owner(User):
 class Truck(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField(max_length=500)
+    overall_rating = models.FloatField(
+        null=True, blank=True, default=None)
     location = models.CharField(max_length=100)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
@@ -69,15 +71,18 @@ class Tag(models.Model):
     truck = models.ForeignKey(Truck, on_delete=models.CASCADE)
 
 
-class Rating(models.Model):
-    date = models.DateField()
-    rating = models.CharField(max_length=1)
-    truck = models.ForeignKey(Truck, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+RATE_CHOICES = [
+    (1, '1'),
+    (2, '2'),
+    (3, '3'),
+    (4, '4'),
+    (5, '5'),
+]
 
 
-class Comment(models.Model):
+class Review(models.Model):
     date = models.DateField()
+    rating = models.PositiveSmallIntegerField(choices=RATE_CHOICES)
     content = models.TextField(max_length=500)
     truck = models.ForeignKey(Truck, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -97,4 +102,9 @@ class Hours(models.Model):
     friday = models.DateField()
     saturday = models.DateField()
     sunday = models.DateField()
+    truck = models.ForeignKey(Truck, on_delete=models.CASCADE)
+
+
+class Favourite(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     truck = models.ForeignKey(Truck, on_delete=models.CASCADE)

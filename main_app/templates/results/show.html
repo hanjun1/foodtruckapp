@@ -5,25 +5,55 @@
 
 <p>Truck ID: {{ truck.id }}</p>
 <p>Truck Name: {{ truck.name }}</p>
+{% if truck.overall_rating %}
+<p>Truck Rating: {{ truck.overall_rating|floatformat:1 }} / 5.0</p>
+{% else %}
+<p>Truck Rating: No user ratings for this truck yet</p>
+{% endif %}
 <p>Truck Description: {{ truck.description }}</p>
 <p>Truck Location: {{ truck.location }}</p>
 
 <hr>
-<h1>Comments</h1>
-{% if user.is_authenticated and user.type == 'Eater' and truck.user != user %}
-<form action="{% url 'create_comment' truck.id %}" method="post">
+
+{% if user.is_authenticated and favourite %}
+<p>Already in your favourites</p>
+{% elif user.is_authenticated %}
+<form action="{% url 'favourites_create' user.id %}" method="POST">
     {% csrf_token %}
+    <input type="hidden" name="truck_id" value="{{ truck.id }}">
+    <button>Add to Favourites</button>
+</form>
+{% else %}
+<p>Log in to add to favourites</p>
+{% endif %}
+
+<hr>
+<h1>Reviews</h1>
+{% if user.is_authenticated and user.type == 'Eater' %}
+<form action="{% url 'create_review' truck.id %}" method="post">
+    {% csrf_token %}
+    <select name="rating" required>
+        <option value="" disabled selected>Select a rating</option>
+        <option value="5">5</option>
+        <option value="4">4</option>
+        <option value="3">3</option>
+        <option value="2">2</option>
+        <option value="1">1</option>
+    </select> <br>
     <textarea name="content" cols="30" rows="10" placeholder="Write comment here..."></textarea>
     <input type="hidden" name="user" value="{{ user }}"> <br>
     <button>Submit</button>
 </form>
 <hr>
 {% endif %}
-{% if comments %}
-{% for comment in comments %}
-<li>User: {{ comment.user }}</li>
-<li>Date: {{ comment.date }}</li>
-<li>Comment: {{ comment.content }}</li>
+{% if reviews %}
+{% for review in reviews %}
+<li>User: {{ review.user }}</li>
+<li>Date: {{ review.date }}</li>
+<li>Rating: {{ review.rating }}</li>
+{% if review.content != "" %}
+<li>Comment: {{ review.content }}</li>
+{% endif %}
 <hr>
 {% endfor %}
 {% else %}
