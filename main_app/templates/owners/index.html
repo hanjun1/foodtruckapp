@@ -4,6 +4,7 @@
 {% for truck in trucks %}
 <p>{{ truck.name }}</p>
 <p>{{ truck.overall_rating }}</p>
+<a href="{% url 'owners_edit' user.id truck.id %}">Edit</a>
 <hr>
 {% endfor %}
 <a href="{% url 'owners_new' user.id %}">Add</a>

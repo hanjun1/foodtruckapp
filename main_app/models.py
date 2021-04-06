@@ -89,9 +89,9 @@ class Review(models.Model):
 
 
 class Menu(models.Model):
-    name = models.CharField(max_length=100)
-    description = models.TextField(max_length=300)
-    price = models.DecimalField(max_digits=6, decimal_places=2)
+    food_name = models.CharField(max_length=100)
+    food_description = models.TextField(max_length=300)
+    food_price = models.DecimalField(max_digits=6, decimal_places=2)
     truck = models.ForeignKey(Truck, on_delete=models.CASCADE)
 
 

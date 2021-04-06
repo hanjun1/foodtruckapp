@@ -4,6 +4,7 @@
 <h1>New Truck</h1>
 
 <form action="{% url 'owners_create' user.id %}" method="POST">
+    {% csrf_token %}
     <input type="text" name="name" placeholder="Enter truck name"> <br>
     <input type="text" name="location" placeholder="Enter location"> <br>
     <textarea name="description" cols="30" rows="10" placeholder="Enter truck description"></textarea> <br>
@@ -49,26 +50,33 @@
             <td><input type="time" name="sunday_close"></td>
         </tr>
     </table>
+    <p>Tags</p>
+    <input type="text" name="content"> <input type="text" name="content"> <input type="text" name="content"><br>
+    <input type="text" name="content"> <input type="text" name="content"> <input type="text" name="content">
     <table class="menu">
         <tr>
             <th>Food Name</th>
             <th>Food Description</th>
             <th>Price</th>
+            <th></th>
         </tr>
         <tr>
-            <td><input type="text" name="name"></td>
-            <td><input type="text" name="description"></td>
-            <td><input type="number" min="0.00" max="10000.00" step="0.01" name="price" placeholder="0.00"></td>
+            <td><input type="text" name="food_name"></td>
+            <td><input type="text" name="food_description"></td>
+            <td><input type="number" min="0.00" max="10000.00" step="0.01" name="food_price" placeholder="0.00"></td>
+            <td><button type="button" class="delete">-</button></td>
         </tr>
         <tr>
-            <td><input type="text" name="name"></td>
-            <td><input type="text" name="description"></td>
-            <td><input type="number" min="0.00" max="10000.00" step="0.01" name="price" placeholder="0.00"></td>
+            <td><input type="text" name="food_name"></td>
+            <td><input type="text" name="food_description"></td>
+            <td><input type="number" min="0.00" max="10000.00" step="0.01" name="food_price" placeholder="0.00"></td>
+            <td><button type="button" class="delete">-</button></td>
         </tr>
         <tr>
-            <td><input type="text" name="name"></td>
-            <td><input type="text" name="description"></td>
-            <td><input type="number" min="0.00" max="10000.00" step="0.01" name="price" placeholder="0.00"></td>
+            <td><input type="text" name="food_name"></td>
+            <td><input type="text" name="food_description"></td>
+            <td><input type="number" min="0.00" max="10000.00" step="0.01" name="food_price" placeholder="0.00"></td>
+            <td><button type="button" class="delete">-</button></td>
         </tr>
     </table>
     <button type="button" class="new-menu">Add More Items</button>
@@ -83,9 +91,20 @@
         let cell1 = newRow.insertCell(0);
         let cell2 = newRow.insertCell(1);
         let cell3 = newRow.insertCell(2);
-        cell1.innerHTML = `<input type="text" name="name">`
-        cell2.innerHTML = `<input type="text" name="description">`
-        cell3.innerHTML = `<input type="number" min="0.00" max="10000.00" step="0.01" name="price" placeholder="0.00">`
+        let cell4 = newRow.insertCell(3);
+        cell1.innerHTML = `<input type="text" name="food_name">`
+        cell2.innerHTML = `<input type="text" name="food_description">`
+        cell3.innerHTML = `<input type="number" min="0.00" max="10000.00" step="0.01" name="food_price" placeholder="0.00">`
+        cell4.innerHTML = `<button type="button" class="delete">-</button>`
+        cell4.children[0].addEventListener('click', () => {
+            menuTable.deleteRow(cell4.children[0].parentElement.parentElement.rowIndex)
+        })
+    })
+    let deleteBtns = document.querySelectorAll('.delete')
+    deleteBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+            menuTable.deleteRow(btn.parentElement.parentElement.rowIndex)
+        })
     })
 </script>
 {% endblock %}
