@@ -8,7 +8,7 @@ from django.contrib.auth.models import Group
 from main_app.forms import CustomUserCreationForm
 from django.contrib.auth import get_user_model
 from django.db.models import Q
-from .models import Truck, Review, Favourite
+from .models import Truck, Review, Favourite, Menu, Hours, Tag
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from .decorators import unauthenticated_user, allowed_users
@@ -20,8 +20,10 @@ User = get_user_model()
 def home(request):
     return render(request, 'index.html')
 
+
 def show_all(request):
     return render(request, 'show.html')
+
 
 def results(request):
     qs = Truck.objects.all()
@@ -46,7 +48,10 @@ def results_show(request, truck_id):
     truck = Truck.objects.get(id=truck_id)
     reviews = Review.objects.all().filter(truck=truck)
     user = request.user
-    favourite = Favourite.objects.all().filter(user=user, truck=truck)
+    if user.id != None:
+        favourite = Favourite.objects.all().filter(user=user, truck=truck)
+    else:
+        favourite = None
     context = {
         'truck': truck,
         'reviews': reviews,
@@ -54,7 +59,8 @@ def results_show(request, truck_id):
     }
     return render(request, 'results/show.html', context)
 
-@login_required
+
+# @login_required
 def create_review(request, truck_id):
     truck = Truck.objects.get(id=truck_id)
     eater = User.objects.get(username=request.POST.get('user'))
@@ -68,28 +74,93 @@ def create_review(request, truck_id):
         for review in all_reviews:
             overall_rating += review.rating
             count += 1
-        overall_rating += rating
-        count += 1
         overall_rating = overall_rating/count
         truck.overall_rating = overall_rating
         truck.save()
     return redirect('results_show', truck_id=truck_id)
 
-@login_required
-@allowed_users(allowed_roles=['Owner'])
+
+# @login_required
+# @allowed_users(allowed_roles=['Owner'])
 def owners_home(request, owner_id):
     owner = User.objects.get(id=owner_id)
     trucks = Truck.objects.all().filter(user=owner)
     # if owner.type == 'Owner':
     return render(request, 'owners/index.html', {'trucks': trucks})
 
-@login_required
-@allowed_users(allowed_roles=['Owner'])
-def owners_new(request):
+
+# @login_required
+# @allowed_users(allowed_roles=['Owner'])
+def owners_new(request, owner_id):
     return render(request, 'owners/new.html')
 
-@login_required
-@allowed_users(allowed_roles=['Eater'])
+
+def owners_create(request, owner_id):
+    if request.method == 'POST':
+        owner = User.objects.get(id=owner_id)
+        truck = Truck.objects.create(name=request.POST.get('name'), description=request.POST.get(
+            'description'), location=request.POST.get('location'), user=owner)
+        monday_open = request.POST.get('monday_open') if request.POST.get(
+            'monday_open') != "" else None
+        tuesday_open = request.POST.get('tuesday_open') if request.POST.get(
+            'tuesday_open') != "" else None
+        wednesday_open = request.POST.get('wednesday_open') if request.POST.get(
+            'wednesday_open') != "" else None
+        thursday_open = request.POST.get('thursday_open') if request.POST.get(
+            'thursday_open') != "" else None
+        friday_open = request.POST.get('friday_open') if request.POST.get(
+            'friday_open') != "" else None
+        saturday_open = request.POST.get('saturday_open') if request.POST.get(
+            'saturday_open') != "" else None
+        sunday_open = request.POST.get('sunday_open') if request.POST.get(
+            'sunday_open') != "" else None
+        monday_close = request.POST.get('monday_close') if request.POST.get(
+            'monday_close') != "" else None
+        tuesday_close = request.POST.get('tuesday_close') if request.POST.get(
+            'tuesday_close') != "" else None
+        wednesday_close = request.POST.get('wednesday_close') if request.POST.get(
+            'wednesday_close') != "" else None
+        thursday_close = request.POST.get('thursday_close') if request.POST.get(
+            'thursday_close') != "" else None
+        friday_close = request.POST.get('friday_close') if request.POST.get(
+            'friday_close') != "" else None
+        saturday_close = request.POST.get('saturday_close') if request.POST.get(
+            'saturday_close') != "" else None
+        sunday_close = request.POST.get('sunday_close') if request.POST.get(
+            'sunday_close') != "" else None
+        Hours.objects.create(monday_open=monday_open, tuesday_open=tuesday_open, wednesday_open=wednesday_open, thursday_open=thursday_open, friday_open=friday_open, saturday_open=saturday_open, sunday_open=sunday_open,
+                             monday_close=monday_close, tuesday_close=tuesday_close, wednesday_close=wednesday_close, thursday_close=thursday_close, friday_close=friday_close, saturday_close=saturday_close, sunday_close=sunday_close, truck=truck)
+        food_names = request.POST.getlist('food_name')
+        food_description = request.POST.getlist('food_description')
+        food_price = request.POST.getlist('food_price')
+        for i in range(0, len(food_names)):
+            if food_names[i] == '':
+                continue
+            else:
+                Menu.objects.create(
+                    food_name=food_names[i], food_description=food_description[i], food_price=food_price[i], truck=truck)
+        tag_content = request.POST.getlist('content')
+        for i in range(0, len(tag_content)):
+            if tag_content[i] == '':
+                continue
+            else:
+                Tag.objects.create(content=tag_content[i], truck=truck)
+    return redirect('owners_home', owner_id=owner_id)
+
+
+def owners_edit(request, owner_id, truck_id):
+    owner = User.objects.get(id=owner_id)
+    truck = Truck.objects.get(id=truck_id)
+    context = {
+        'owner': owner,
+        'truck': truck
+    }
+    return render(request, 'owners/edit.html', context)
+
+# @login_required
+# @allowed_users(allowed_roles=['Eater'])
+
+
 def favourites(request, eater_id):
     eater = User.objects.get(id=eater_id)
     favourites = Favourite.objects.all().filter(user=eater)
@@ -99,8 +170,9 @@ def favourites(request, eater_id):
     }
     return render(request, 'users/favourites.html', context)
 
-@login_required
-@allowed_users(allowed_roles=['Eater'])
+
+# @login_required
+# @allowed_users(allowed_roles=['Eater'])
 def favourites_create(request, eater_id):
     eater = User.objects.get(id=eater_id)
     truck_id = request.POST.get('truck_id')
@@ -127,7 +199,7 @@ def signup(request):
             # This is how we log a user in via code
             login(request, user)
             if user.type == 'Owner':
-                return redirect('owners_home')
+                return redirect('owners_home', owner_id=user.id)
             else:
                 return redirect('home')
         else:

@@ -89,19 +89,27 @@ class Review(models.Model):
 
 
 class Menu(models.Model):
-    name = models.CharField(max_length=100)
-    price = models.DecimalField(max_digits=6, decimal_places=2)
+    food_name = models.CharField(max_length=100)
+    food_description = models.TextField(max_length=300)
+    food_price = models.DecimalField(max_digits=6, decimal_places=2)
     truck = models.ForeignKey(Truck, on_delete=models.CASCADE)
 
 
 class Hours(models.Model):
-    monday = models.DateField()
-    tuesday = models.DateField()
-    wednesday = models.DateField()
-    thursday = models.DateField()
-    friday = models.DateField()
-    saturday = models.DateField()
-    sunday = models.DateField()
+    monday_open = models.TimeField(null=True, blank=True, default=None)
+    tuesday_open = models.TimeField(null=True, blank=True, default=None)
+    wednesday_open = models.TimeField(null=True, blank=True, default=None)
+    thursday_open = models.TimeField(null=True, blank=True, default=None)
+    friday_open = models.TimeField(null=True, blank=True, default=None)
+    saturday_open = models.TimeField(null=True, blank=True, default=None)
+    sunday_open = models.TimeField(null=True, blank=True, default=None)
+    monday_close = models.TimeField(null=True, blank=True, default=None)
+    tuesday_close = models.TimeField(null=True, blank=True, default=None)
+    wednesday_close = models.TimeField(null=True, blank=True, default=None)
+    thursday_close = models.TimeField(null=True, blank=True, default=None)
+    friday_close = models.TimeField(null=True, blank=True, default=None)
+    saturday_close = models.TimeField(null=True, blank=True, default=None)
+    sunday_close = models.TimeField(null=True, blank=True, default=None)
     truck = models.ForeignKey(Truck, on_delete=models.CASCADE)
 
 

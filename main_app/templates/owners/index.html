@@ -1,9 +1,12 @@
 {% extends 'base.html'%}
 {% block content %}
 
-{% for t in trucks %}
-<li>{{ t.name }}</li>
+{% for truck in trucks %}
+<p>{{ truck.name }}</p>
+<p>{{ truck.overall_rating }}</p>
+<a href="{% url 'owners_edit' user.id truck.id %}">Edit</a>
+<hr>
 {% endfor %}
-<a href="/owners/new">Add</a>
+<a href="{% url 'owners_new' user.id %}">Add</a>
 
 {% endblock %}

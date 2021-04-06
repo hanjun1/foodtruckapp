@@ -12,6 +12,10 @@ urlpatterns = [
     path('<int:eater_id>/favourites/', views.favourites, name="favourites"),
     path('<int:eater_id>/favourites/new/',
          views.favourites_create, name="favourites_create"),
-    path('owners/new/', views.owners_new, name="owners_new"),
+    path('owners/<int:owner_id>/new/', views.owners_new, name="owners_new"),
+    path('owners/<int:owner_id>/create/',
+         views.owners_create, name="owners_create"),
+    path('owners/<int:owner_id>/<int:truck_id>/edit/',
+         views.owners_edit, name="owners_edit"),
     path('accounts/signup/', views.signup, name='signup'),
 ]
