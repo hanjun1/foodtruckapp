@@ -116,3 +116,11 @@ class Hours(models.Model):
 class Favourite(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     truck = models.ForeignKey(Truck, on_delete=models.CASCADE)
+
+
+class Photo(models.Model):
+    url = models.CharField(max_length=200)
+    truck = models.ForeignKey(Truck, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"Photo for truck_id: {self.truck_id} @{self.url}"

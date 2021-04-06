@@ -7,6 +7,7 @@
     {% csrf_token %}
     <input type="text" name="name" placeholder="Enter truck name" value="{{ truck.name }}"> <br>
     <input type="text" name="location" placeholder="Enter location" value="{{ truck.location}}"> <br>
+    Add/Edit Photo <input type="file" name="photo-file"><br>
     <textarea name="description" cols="30" rows="10"
         placeholder="Enter truck description">{{ truck.description }}</textarea> <br>
     <table>

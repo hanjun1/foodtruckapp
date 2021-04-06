@@ -12,7 +12,11 @@
 {% endif %}
 <p>Truck Description: {{ truck.description }}</p>
 <p>Truck Location: {{ truck.location }}</p>
-
+{% for photo in truck.photo_set.all %}
+        <img src="{{photo.url}}">
+    {% empty %}
+        <div>No Photos Uploaded</div>
+    {% endfor %}
 <hr>
 
 {% if user.is_authenticated and favourite %}
