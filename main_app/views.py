@@ -151,11 +151,140 @@ def owners_create(request, owner_id):
 def owners_edit(request, owner_id, truck_id):
     owner = User.objects.get(id=owner_id)
     truck = Truck.objects.get(id=truck_id)
+    try:
+        hours = Hours.objects.get(truck=truck)
+        hours.monday_open = hours.monday_open.strftime(
+            '%H:%M:%S') if hours.monday_open != None else None
+        hours.monday_close = hours.monday_close.strftime(
+            '%H:%M:%S') if hours.monday_close != None else None
+        hours.tuesday_open = hours.tuesday_open.strftime(
+            '%H:%M:%S') if hours.tuesday_open != None else None
+        hours.tuesday_close = hours.tuesday_close.strftime(
+            '%H:%M:%S') if hours.tuesday_close != None else None
+        hours.wednesday_open = hours.wednesday_open.strftime(
+            '%H:%M:%S') if hours.wednesday_open != None else None
+        hours.wednesday_close = hours.wednesday_close.strftime(
+            '%H:%M:%S') if hours.wednesday_close != None else None
+        hours.thursday_open = hours.thursday_open.strftime(
+            '%H:%M:%S') if hours.thursday_open != None else None
+        hours.thursday_close = hours.thursday_close.strftime(
+            '%H:%M:%S') if hours.thursday_close != None else None
+        hours.friday_open = hours.friday_open.strftime(
+            '%H:%M:%S') if hours.friday_open != None else None
+        hours.friday_close = hours.friday_close.strftime(
+            '%H:%M:%S') if hours.friday_close != None else None
+        hours.saturday_open = hours.saturday_open.strftime(
+            '%H:%M:%S') if hours.saturday_open != None else None
+        hours.saturday_close = hours.saturday_close.strftime(
+            '%H:%M:%S') if hours.saturday_close != None else None
+        hours.sunday_open = hours.sunday_open.strftime(
+            '%H:%M:%S') if hours.sunday_open != None else None
+        hours.sunday_close = hours.sunday_close.strftime(
+            '%H:%M:%S') if hours.sunday_close != None else None
+    except Hours.DoesNotExist:
+        hours = None
+    tags = Tag.objects.all().filter(truck=truck)
+    len_tags = len(tags)
+    tags_list = []
+    for i in range(0, 6):
+        if i < len_tags:
+            tags_list.append(tags[i].content)
+        else:
+            tags_list.append('')
+    menu = Menu.objects.all().filter(truck_id=truck.id)
     context = {
         'owner': owner,
-        'truck': truck
+        'truck': truck,
+        'hours': hours,
+        'tags': tags_list,
+        'menu': menu
     }
     return render(request, 'owners/edit.html', context)
+
+
+def owners_update(request, owner_id, truck_id):
+    owner = User.objects.get(id=owner_id)
+    truck = Truck.objects.get(id=truck_id)
+    truck.name = request.POST.get('name')
+    truck.description = request.POST.get('description')
+    truck.location = request.POST.get('location')
+    truck.save()
+    monday_open = request.POST.get('monday_open') if request.POST.get(
+        'monday_open') != "" else None
+    tuesday_open = request.POST.get('tuesday_open') if request.POST.get(
+        'tuesday_open') != "" else None
+    wednesday_open = request.POST.get('wednesday_open') if request.POST.get(
+        'wednesday_open') != "" else None
+    thursday_open = request.POST.get('thursday_open') if request.POST.get(
+        'thursday_open') != "" else None
+    friday_open = request.POST.get('friday_open') if request.POST.get(
+        'friday_open') != "" else None
+    saturday_open = request.POST.get('saturday_open') if request.POST.get(
+        'saturday_open') != "" else None
+    sunday_open = request.POST.get('sunday_open') if request.POST.get(
+        'sunday_open') != "" else None
+    monday_close = request.POST.get('monday_close') if request.POST.get(
+        'monday_close') != "" else None
+    tuesday_close = request.POST.get('tuesday_close') if request.POST.get(
+        'tuesday_close') != "" else None
+    wednesday_close = request.POST.get('wednesday_close') if request.POST.get(
+        'wednesday_close') != "" else None
+    thursday_close = request.POST.get('thursday_close') if request.POST.get(
+        'thursday_close') != "" else None
+    friday_close = request.POST.get('friday_close') if request.POST.get(
+        'friday_close') != "" else None
+    saturday_close = request.POST.get('saturday_close') if request.POST.get(
+        'saturday_close') != "" else None
+    sunday_close = request.POST.get('sunday_close') if request.POST.get(
+        'sunday_close') != "" else None
+    hours = Hours.objects.get(truck=truck)
+    hours.monday_open = monday_open
+    hours.tuesday_open = tuesday_open
+    hours.wednesday_open = wednesday_open
+    hours.thursday_open = thursday_open
+    hours.friday_open = friday_open
+    hours.saturday_open = saturday_open
+    hours.sunday_open = sunday_open
+    hours.monday_close = monday_close
+    hours.tuesday_close = tuesday_close
+    hours.wednesday_close = wednesday_close
+    hours.thursday_close = thursday_close
+    hours.friday_close = friday_close
+    hours.saturday_close = saturday_close
+    hours.sunday_close = sunday_close
+    hours.save()
+    menu = Menu.objects.all().filter(truck=truck)
+    food_names = request.POST.getlist('food_name')
+    food_description = request.POST.getlist('food_description')
+    food_price = request.POST.getlist('food_price')
+    len_menu = len(menu)
+    for i in range(0, max(len_menu, len(food_names))):
+        if i < len_menu and i < len(food_names):
+            menu[i].food_name = food_names[i]
+            menu[i].food_description = food_description[i]
+            menu[i].food_price = food_price[i]
+            menu[i].save()
+        elif i < len_menu and i >= len(food_names):
+            menu[i].delete()
+        elif i >= len_menu and i < len(food_names) and food_names[i] != "":
+            Menu.objects.create(
+                food_name=food_names[i], food_description=food_description[i], food_price=food_price[i], truck=truck)
+        else:
+            continue
+    tag_content = request.POST.getlist('content')
+    tags = Tag.objects.all().filter(truck=truck)
+    len_tags = len(tags)
+    for i in range(0, 6):
+        if i < len_tags and tag_content[i] != "":
+            tags[i].content = tag_content[i]
+            tags[i].save()
+        elif i < len_tags and tag_content[i] == "":
+            tags[i].delete()
+        elif i >= len_tags and tag_content[i] != "":
+            Tag.objects.create(content=tag_content[i], truck=truck)
+        else:
+            continue
+    return redirect('owners_home', owner_id=owner_id)
 
 # @login_required
 # @allowed_users(allowed_roles=['Eater'])

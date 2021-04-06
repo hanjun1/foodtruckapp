@@ -1,6 +1,114 @@
 {% extends 'base.html'%}
 {% block content %}
 
-<h1>test</h1>
+<h1>Edit {{ truck.name }}</h1>
+
+<form action="{% url 'owners_update' owner.id truck.id %}" method="POST">
+    {% csrf_token %}
+    <input type="text" name="name" placeholder="Enter truck name" value="{{ truck.name }}"> <br>
+    <input type="text" name="location" placeholder="Enter location" value="{{ truck.location}}"> <br>
+    <textarea name="description" cols="30" rows="10"
+        placeholder="Enter truck description">{{ truck.description }}</textarea> <br>
+    <table>
+        <tr>
+            <th>Day</th>
+            <th>Open Hours</th>
+            <th>Close Hours</th>
+        </tr>
+        <tr>
+            <td>Monday</td>
+            <td><input type="time" name="monday_open" value="{{ hours.monday_open }}"></td>
+            <td><input type="time" name="monday_close" value="{{ hours.monday_close }}"></td>
+        </tr>
+        <tr>
+            <td>Tuesday</td>
+            <td><input type="time" name="tuesday_open" value="{{ hours.tuesday_open }}"></td>
+            <td><input type="time" name="tuesday_close" value="{{ hours.tuesday_close }}"></td>
+        </tr>
+        <tr>
+            <td>Wednesday</td>
+            <td><input type="time" name="wednesday_open" value="{{ hours.wednesday_open }}"></td>
+            <td><input type="time" name="wednesday_close" value="{{ hours.wednesday_close }}"></td>
+        </tr>
+        <tr>
+            <td>Thursday</td>
+            <td><input type="time" name="thursday_open" value="{{ hours.thursday_open }}"></td>
+            <td><input type="time" name="thursday_close" value="{{ hours.thursday_close }}"></td>
+        </tr>
+        <tr>
+            <td>Friday</td>
+            <td><input type="time" name="friday_open" value="{{ hours.friday_open }}"></td>
+            <td><input type="time" name="friday_close" value="{{ hours.friday_close }}"></td>
+        </tr>
+        <tr>
+            <td>Saturday</td>
+            <td><input type="time" name="saturday_open" value="{{ hours.saturday_open }}"></td>
+            <td><input type="time" name="saturday_close" value="{{ hours.saturday_close }}"></td>
+        </tr>
+        <tr>
+            <td>Sunday</td>
+            <td><input type="time" name="sunday_open" value="{{ hours.sunday_open }}"></td>
+            <td><input type="time" name="sunday_close" value="{{ hours.sunday_close }}"></td>
+        </tr>
+    </table>
+    <p>Tags</p>
+    <input type="text" name="content" value="{{ tags.0 }}"> <input type="text" name="content" value="{{ tags.1 }}">
+    <input type="text" name="content" value="{{ tags.2 }}"><br>
+    <input type="text" name="content" value="{{ tags.3 }}"> <input type="text" name="content" value="{{ tags.4 }}">
+    <input type="text" name="content" value="{{ tags.5 }}">
+    <table class="menu">
+        <tr>
+            <th>Food Name</th>
+            <th>Food Description</th>
+            <th>Price</th>
+            <th></th>
+        </tr>
+        {% if menu %}
+        {% for menu_item in menu %}
+        <tr>
+            <td><input type="text" name="food_name" value="{{ menu_item.food_name}}"></td>
+            <td><input type="text" name="food_description" value="{{ menu_item.food_description }}"></td>
+            <td><input type="number" min="0.00" max="10000.00" step="0.01" name="food_price"
+                    value="{{ menu_item.food_price}}"></td>
+            <td><button type="button" class="delete">-</button></td>
+        </tr>
+        {% endfor %}
+        {% else %}
+        <tr>
+            <td><input type="text" name="food_name"></td>
+            <td><input type="text" name="food_description"></td>
+            <td><input type="number" min="0.00" max="10000.00" step="0.01" name="food_price" placeholder="0.00"></td>
+            <td><button type="button" class="delete">-</button></td>
+        </tr>
+        {% endif %}
+    </table>
+    <button type="button" class="new-menu">Add More Items</button>
+    <br> <br>
+    <button>Update Listing</button>
+</form>
+<script>
+    let menuTable = document.querySelector('.menu')
+    let newMenuBtn = document.querySelector('.new-menu')
+    newMenuBtn.addEventListener('click', () => {
+        let newRow = menuTable.insertRow(-1);
+        let cell1 = newRow.insertCell(0);
+        let cell2 = newRow.insertCell(1);
+        let cell3 = newRow.insertCell(2);
+        let cell4 = newRow.insertCell(3);
+        cell1.innerHTML = `<input type="text" name="food_name">`
+        cell2.innerHTML = `<input type="text" name="food_description">`
+        cell3.innerHTML = `<input type="number" min="0.00" max="10000.00" step="0.01" name="food_price" placeholder="0.00">`
+        cell4.innerHTML = `<button type="button" class="delete">-</button>`
+        cell4.children[0].addEventListener('click', () => {
+            menuTable.deleteRow(cell4.children[0].parentElement.parentElement.rowIndex)
+        })
+    })
+    let deleteBtns = document.querySelectorAll('.delete')
+    deleteBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+            menuTable.deleteRow(btn.parentElement.parentElement.rowIndex)
+        })
+    })
+</script>
 
 {% endblock %}
