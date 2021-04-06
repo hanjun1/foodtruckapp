@@ -17,5 +17,7 @@ urlpatterns = [
          views.owners_create, name="owners_create"),
     path('owners/<int:owner_id>/<int:truck_id>/edit/',
          views.owners_edit, name="owners_edit"),
+    path('owners/<int:owner_id>/<int:truck_id>/update/',
+         views.owners_update, name="owners_update"),
     path('accounts/signup/', views.signup, name='signup'),
 ]
