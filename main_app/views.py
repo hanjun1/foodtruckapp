@@ -26,12 +26,19 @@ def home(request):
 
 
 def show_all(request):
-    return render(request, 'show.html')
+    trucks = Truck.objects.all()
+    tags = Tag.objects.all()
+    context = {
+        'trucks': trucks,
+        'tags': tags
+    }
+    return render(request, 'show.html', context)
 
 
 def results(request):
     qs = Truck.objects.all()
     name_contains_query = request.GET.get('search')
+    tags = Tag.objects.all()
 
     # if name_contains_query != '' and name_contains_query is not None:
     #     qs = qs.filter(name__icontains=name_contains_query)
@@ -43,7 +50,8 @@ def results(request):
 
     context = {
         'name_contains_query': name_contains_query,
-        'queryset': qs
+        'queryset': qs,
+        'tags': tags
     }
     return render(request, 'results/index.html', context)
 
@@ -52,6 +60,7 @@ def results_show(request, truck_id):
     truck = Truck.objects.get(id=truck_id)
     reviews = Review.objects.all().filter(truck=truck)
     user = request.user
+
     if user.id != None:
         favourite = Favourite.objects.all().filter(user=user, truck=truck)
         person_review = Review.objects.all().filter(user=user, truck=truck)
@@ -67,7 +76,7 @@ def results_show(request, truck_id):
     return render(request, 'results/show.html', context)
 
 
-@login_required
+# @login_required
 def create_review(request, truck_id):
     truck = Truck.objects.get(id=truck_id)
     eater = User.objects.get(username=request.POST.get('user'))
@@ -83,10 +92,12 @@ def create_review(request, truck_id):
             count += 1
         overall_rating = overall_rating/count
         truck.overall_rating = overall_rating
+        truck.num_reviews = count
         truck.save()
     return redirect('results_show', truck_id=truck_id)
 
 
+# @login_required
 def delete_review(request, truck_id, review_id):
     review = Review.objects.get(id=review_id)
     review.delete()
@@ -100,12 +111,13 @@ def delete_review(request, truck_id, review_id):
             count += 1
         overall_rating = overall_rating/count
         truck.overall_rating = overall_rating
+        truck.num_reviews = count
         truck.save()
     return redirect('results_show', truck_id=truck_id)
 
 
-@login_required
-@allowed_users(allowed_roles=['Owner'])
+# @login_required
+# @allowed_users(allowed_roles=['Owner'])
 def owners_home(request, owner_id):
     if request.user.id == owner_id:
         owner = User.objects.get(id=owner_id)
@@ -117,8 +129,8 @@ def owners_home(request, owner_id):
         return redirect('home')
 
 
-@login_required
-@allowed_users(allowed_roles=['Owner'])
+# @login_required
+# @allowed_users(allowed_roles=['Owner'])
 def owners_new(request, owner_id):
     if request.user.id == owner_id:
         return render(request, 'owners/new.html')
@@ -128,8 +140,8 @@ def owners_new(request, owner_id):
         return redirect('home')
 
 
-@login_required
-@allowed_users(allowed_roles=['Owner'])
+# @login_required
+# @allowed_users(allowed_roles=['Owner'])
 def owners_create(request, owner_id):
     if request.user.id == owner_id:
         if request.method == 'POST':
@@ -147,7 +159,7 @@ def owners_create(request, owner_id):
             else:
                 url = "https://s3.us-east-2.amazonaws.com/catcollectormdpn/97e068.png"
             truck = Truck.objects.create(name=request.POST.get('name'), description=request.POST.get(
-                'description'), location=request.POST.get('location'), url=url, user=owner)
+                'description'), location=request.POST.get('location'), url=url, num_reviews=0, user=owner)
             monday_open = request.POST.get('monday_open') if request.POST.get(
                 'monday_open') != "" else None
             tuesday_open = request.POST.get('tuesday_open') if request.POST.get(
@@ -200,8 +212,8 @@ def owners_create(request, owner_id):
         return redirect('home')
 
 
-@login_required
-@allowed_users(allowed_roles=['Owner'])
+# @login_required
+# @allowed_users(allowed_roles=['Owner'])
 def owners_edit(request, owner_id, truck_id):
     if request.user.id == owner_id:
         owner = User.objects.get(id=owner_id)
@@ -261,8 +273,8 @@ def owners_edit(request, owner_id, truck_id):
         return redirect('home')
 
 
-@login_required
-@allowed_users(allowed_roles=['Owner'])
+# @login_required
+# @allowed_users(allowed_roles=['Owner'])
 def owners_update(request, owner_id, truck_id):
     if request.user.id == owner_id:
         owner = User.objects.get(id=owner_id)
@@ -367,8 +379,8 @@ def owners_update(request, owner_id, truck_id):
         return redirect('home')
 
 
-@login_required
-@allowed_users(allowed_roles=['Owner'])
+# @login_required
+# @allowed_users(allowed_roles=['Owner'])
 def owners_delete(request, owner_id, truck_id):
     if request.user.id == owner_id:
         truck = Truck.objects.get(id=truck_id)
@@ -380,8 +392,8 @@ def owners_delete(request, owner_id, truck_id):
         return redirect('home')
 
 
-@login_required
-@allowed_users(allowed_roles=['Eater'])
+# @login_required
+# @allowed_users(allowed_roles=['Eater'])
 def favourites(request, eater_id):
     if request.user.id == eater_id:
         eater = User.objects.get(id=eater_id)
@@ -399,8 +411,8 @@ def favourites(request, eater_id):
         return redirect('home')
 
 
-@login_required
-@allowed_users(allowed_roles=['Eater'])
+# @login_required
+# @allowed_users(allowed_roles=['Eater'])
 def favourites_create(request, eater_id):
     if request.user.id == eater_id:
         eater = User.objects.get(id=eater_id)
@@ -416,6 +428,8 @@ def favourites_create(request, eater_id):
         return redirect('home')
 
 
+# @login_required
+# @allowed_users(allowed_roles=['Eater'])
 def favourites_delete(request, eater_id, favourite_id):
     if request.user.id == eater_id:
         eater = User.objects.get(id=eater_id)

@@ -61,6 +61,7 @@ class Truck(models.Model):
         null=True, blank=True, default=None)
     location = models.CharField(max_length=100)
     url = models.CharField(max_length=200)
+    num_reviews = models.IntegerField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):

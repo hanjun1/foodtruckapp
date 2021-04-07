@@ -1,11 +1,28 @@
 {% extends 'base.html'%}
 {% block content %}
 
-<p>Showing all results in Toronto, ON</p>
+<br>
+
 <form action="{% url 'results' %}" method="GET">
     <label>Find a food truck</label> <br>
     <input type="text" name="search"> <br>
     <button>Search</button>
 </form>
+
+<p>Showing all results in Toronto, ON</p>
+
+{% for truck in trucks %}
+<div>
+    <p>{{ truck.name }}</p>
+    <p>{{ truck.overall_rating }}</p>
+    {% for tag in tags %}
+    {% if tag.truck.id == truck.id %}
+    <li>{{ tag.content }}</li>
+    {% endif %}
+    {% endfor %}
+    <p><a href="{% url 'results_show' truck.id %}">See More</a></p>
+</div>
+<hr>
+{% endfor %}
 
 {% endblock %}
