@@ -1,9 +1,12 @@
-@import url("https://fonts.googleapis.com/css2?family=Righteous&display=swap");
+body {
+  font-family: "Montserrat", sans-serif;
+}
 
 /* NAV BAR */
 
 #logo {
   text-decoration: none;
+  font-family: "Montserrat", sans-serif;
   color: black;
   font-size: 24px;
 }
@@ -103,6 +106,10 @@
   width: 100%;
 }
 
+.input-group .btn {
+  z-index: 0;
+}
+
 /* .sub-main {
   display: flex;
   flex-direction: column;
@@ -114,3 +121,121 @@
 
 .index-form {
 } */
+
+/* RESULTS - INDEX */
+
+.content a {
+  text-decoration: none;
+  color: black;
+}
+
+.wrapper {
+  max-width: 590px;
+  height: 100%;
+  margin: auto;
+  background-color: white;
+}
+
+.buttonWrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+button {
+  letter-spacing: 3px;
+  border: none;
+  padding: 10px;
+  background-color: #bcd5ef;
+  color: #232c3d;
+  font-size: 18px;
+  cursor: pointer;
+  transition: 0.5s;
+}
+
+button:hover {
+  background-color: #d5e3ff;
+}
+
+button.active {
+  background-color: white;
+}
+
+.active {
+  background-color: white;
+}
+
+.content {
+  display: none;
+  padding: 10px 20px;
+}
+
+.content.active {
+  display: block;
+}
+
+.icon {
+  display: inline-flex;
+  align-self: center;
+  vertical-align: text-top;
+}
+
+.icon svg {
+  height: 1rem;
+}
+
+.truck-container {
+  background: #bcd5ef;
+  display: flex;
+  margin: 10px 0;
+  height: 6rem;
+  border-radius: 0.5rem;
+}
+
+.truck-container-image {
+  width: 33%;
+  padding: 0.5rem;
+}
+
+.truck-container-image img {
+  width: 100%;
+  height: 100%;
+}
+
+.truck-description-container {
+  width: 66%;
+}
+
+.truck-description-name {
+  font-size: 1rem;
+  font-weight: bold;
+  margin-top: 0.5rem;
+}
+
+.truck-description-name p {
+  margin-bottom: 0;
+}
+
+.truck-description-rating {
+  display: flex;
+  align-items: center;
+}
+
+.truck-description-rating p {
+  font-size: 0.9rem;
+  margin-bottom: 0;
+}
+
+/* .truck-description-name,
+.truck-description-rating,
+.truck-description-tags {
+  height: 33%;
+} */
+
+.truck-description-tags {
+  /* display: flex;
+  justify-content: space-evenly; */
+  font-size: 0.7rem;
+}
+
+.truck-description-tags {
+}
