@@ -19,6 +19,7 @@
     <ul>
         {% for truck in queryset %}
         <li>
+            <img src="{{truck.url}}">
             <a href="{% url 'results_show' truck.id %}">{{ truck.name }}</a>
             {% if truck.overall_rating %}
             <p>{{ truck.overall_rating|floatformat:1 }} / 5.0</p>
