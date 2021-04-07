@@ -29,7 +29,7 @@
 
 <hr>
 <h1>Reviews</h1>
-{% if user.is_authenticated and user.type == 'Eater' %}
+{% if user.is_authenticated and user.type == 'Eater' and person_review == None %}
 <form action="{% url 'create_review' truck.id %}" method="post">
     {% csrf_token %}
     <select name="rating" required>
@@ -45,6 +45,10 @@
     <button>Submit</button>
 </form>
 <hr>
+{% elif person_review %}
+<p>You have already submitted a review</p>
+{% else %}
+<p>Log in to add a review</p>
 {% endif %}
 {% if reviews %}
 {% for review in reviews %}
@@ -54,11 +58,13 @@
 {% if review.content != "" %}
 <li>Comment: {{ review.content }}</li>
 {% endif %}
+{% if user.id == review.user.id %}
+<li><a href="{% url 'delete_review' truck.id review.id %}">Delete</a></li>
+{% endif %}
 <hr>
 {% endfor %}
 {% else %}
 <p>No comments yet</p>
-
 {% endif %}
 
 {% endblock %}
