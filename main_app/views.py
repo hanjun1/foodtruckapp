@@ -22,7 +22,13 @@ def home(request):
 
 
 def show_all(request):
-    return render(request, 'show.html')
+    trucks = Truck.objects.all()
+    tags = Tag.objects.all()
+    context = {
+        'trucks': trucks,
+        'tags': tags
+    }
+    return render(request, 'show.html', context)
 
 
 def results(request):
@@ -63,7 +69,7 @@ def results_show(request, truck_id):
     return render(request, 'results/show.html', context)
 
 
-# @login_required
+@login_required
 def create_review(request, truck_id):
     truck = Truck.objects.get(id=truck_id)
     eater = User.objects.get(username=request.POST.get('user'))
@@ -83,6 +89,7 @@ def create_review(request, truck_id):
     return redirect('results_show', truck_id=truck_id)
 
 
+@login_required
 def delete_review(request, truck_id, review_id):
     review = Review.objects.get(id=review_id)
     review.delete()
@@ -124,6 +131,8 @@ def owners_new(request, owner_id):
         return redirect('home')
 
 
+# @login_required
+# @allowed_users(allowed_roles=['Owner'])
 def owners_create(request, owner_id):
     if request.user.id == owner_id:
         if request.method == 'POST':
@@ -182,6 +191,8 @@ def owners_create(request, owner_id):
         return redirect('home')
 
 
+# @login_required
+# @allowed_users(allowed_roles=['Owner'])
 def owners_edit(request, owner_id, truck_id):
     if request.user.id == owner_id:
         owner = User.objects.get(id=owner_id)
@@ -241,6 +252,8 @@ def owners_edit(request, owner_id, truck_id):
         return redirect('home')
 
 
+# @login_required
+# @allowed_users(allowed_roles=['Owner'])
 def owners_update(request, owner_id, truck_id):
     if request.user.id == owner_id:
         owner = User.objects.get(id=owner_id)
@@ -331,6 +344,8 @@ def owners_update(request, owner_id, truck_id):
         return redirect('home')
 
 
+# @login_required
+# @allowed_users(allowed_roles=['Owner'])
 def owners_delete(request, owner_id, truck_id):
     if request.user.id == owner_id:
         truck = Truck.objects.get(id=truck_id)
@@ -341,10 +356,9 @@ def owners_delete(request, owner_id, truck_id):
     else:
         return redirect('home')
 
+
 # @login_required
 # @allowed_users(allowed_roles=['Eater'])
-
-
 def favourites(request, eater_id):
     if request.user.id == eater_id:
         eater = User.objects.get(id=eater_id)
@@ -379,6 +393,8 @@ def favourites_create(request, eater_id):
         return redirect('home')
 
 
+# @login_required
+# @allowed_users(allowed_roles=['Eater'])
 def favourites_delete(request, eater_id, favourite_id):
     if request.user.id == eater_id:
         eater = User.objects.get(id=eater_id)
