@@ -5,6 +5,8 @@
 {% for favourite in favourites %}
 <li>
     <a href="{% url 'results_show' favourite.truck.id %}">{{ favourite.truck.name }}</a>
+    <br>
+    <a href="{% url 'favourites_delete' eater.id favourite.id %}">Delete</a>
 </li>
 {% endfor %}
 

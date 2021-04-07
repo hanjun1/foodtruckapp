@@ -6,7 +6,7 @@
 <form action="{% url 'owners_create' user.id %}" method="POST">
     {% csrf_token %}
     <input type="text" name="name" placeholder="Enter truck name"> <br>
-    <input type="text" name="location" placeholder="Enter location"> <br>
+    <input id="autocomplete" type="text" name="location" placeholder="Enter a location" /> <br>
     <textarea name="description" cols="30" rows="10" placeholder="Enter truck description"></textarea> <br>
     <table>
         <tr>
@@ -106,5 +106,12 @@
             menuTable.deleteRow(btn.parentElement.parentElement.rowIndex)
         })
     })
+</script>
+<script
+    src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyDtN4w76X1h9sk9jNP8SvP4jF4YIuLv2jA"></script>
+<script>
+    new google.maps.places.Autocomplete(
+        document.getElementById("autocomplete")
+    );
 </script>
 {% endblock %}
