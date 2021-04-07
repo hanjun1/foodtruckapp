@@ -12,7 +12,11 @@ from .models import Truck, Review, Favourite, Menu, Hours, Tag
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from .decorators import unauthenticated_user, allowed_users
+import uuid
+import boto3
 
+S3_BASE_URL = 'https://s3.us-east-2.amazonaws.com/'
+BUCKET = 'catcollectormdpn'
 
 User = get_user_model()
 
@@ -107,8 +111,8 @@ def delete_review(request, truck_id, review_id):
     return redirect('results_show', truck_id=truck_id)
 
 
-# @login_required
-# @allowed_users(allowed_roles=['Owner'])
+@login_required
+@allowed_users(allowed_roles=['Owner'])
 def owners_home(request, owner_id):
     if request.user.id == owner_id:
         owner = User.objects.get(id=owner_id)
@@ -120,8 +124,8 @@ def owners_home(request, owner_id):
         return redirect('home')
 
 
-# @login_required
-# @allowed_users(allowed_roles=['Owner'])
+@login_required
+@allowed_users(allowed_roles=['Owner'])
 def owners_new(request, owner_id):
     if request.user.id == owner_id:
         return render(request, 'owners/new.html')
@@ -131,14 +135,26 @@ def owners_new(request, owner_id):
         return redirect('home')
 
 
-# @login_required
-# @allowed_users(allowed_roles=['Owner'])
+@login_required
+@allowed_users(allowed_roles=['Owner'])
 def owners_create(request, owner_id):
     if request.user.id == owner_id:
         if request.method == 'POST':
             owner = User.objects.get(id=owner_id)
+            photo_file = request.FILES.get('photo-file', None)
+            if photo_file:
+                s3 = boto3.client('s3')
+                key = uuid.uuid4().hex[:6] + \
+                    photo_file.name[photo_file.name.rfind('.'):]
+                try:
+                    s3.upload_fileobj(photo_file, BUCKET, key)
+                    url = f"{S3_BASE_URL}{BUCKET}/{key}"
+                except:
+                    print('An error occurred uploading file to S3')
+            else:
+                url = "https://s3.us-east-2.amazonaws.com/catcollectormdpn/97e068.png"
             truck = Truck.objects.create(name=request.POST.get('name'), description=request.POST.get(
-                'description'), location=request.POST.get('location'), user=owner)
+                'description'), location=request.POST.get('location'), url=url, user=owner)
             monday_open = request.POST.get('monday_open') if request.POST.get(
                 'monday_open') != "" else None
             tuesday_open = request.POST.get('tuesday_open') if request.POST.get(
@@ -191,8 +207,8 @@ def owners_create(request, owner_id):
         return redirect('home')
 
 
-# @login_required
-# @allowed_users(allowed_roles=['Owner'])
+@login_required
+@allowed_users(allowed_roles=['Owner'])
 def owners_edit(request, owner_id, truck_id):
     if request.user.id == owner_id:
         owner = User.objects.get(id=owner_id)
@@ -252,8 +268,8 @@ def owners_edit(request, owner_id, truck_id):
         return redirect('home')
 
 
-# @login_required
-# @allowed_users(allowed_roles=['Owner'])
+@login_required
+@allowed_users(allowed_roles=['Owner'])
 def owners_update(request, owner_id, truck_id):
     if request.user.id == owner_id:
         owner = User.objects.get(id=owner_id)
@@ -261,6 +277,20 @@ def owners_update(request, owner_id, truck_id):
         truck.name = request.POST.get('name')
         truck.description = request.POST.get('description')
         truck.location = request.POST.get('location')
+        photo_file = request.FILES.get('photo-file', None)
+        if photo_file:
+            s3 = boto3.client('s3')
+            key = uuid.uuid4().hex[:6] + \
+                photo_file.name[photo_file.name.rfind('.'):]
+            try:
+                s3.upload_fileobj(photo_file, BUCKET, key)
+                url = f"{S3_BASE_URL}{BUCKET}/{key}"
+                print('url: ', url)
+            except:
+                print('An error occurred uploading file to S3')
+        else:
+            url = "https://s3.us-east-2.amazonaws.com/catcollectormdpn/97e068.png"
+        truck.url = url
         truck.save()
         monday_open = request.POST.get('monday_open') if request.POST.get(
             'monday_open') != "" else None
@@ -344,8 +374,8 @@ def owners_update(request, owner_id, truck_id):
         return redirect('home')
 
 
-# @login_required
-# @allowed_users(allowed_roles=['Owner'])
+@login_required
+@allowed_users(allowed_roles=['Owner'])
 def owners_delete(request, owner_id, truck_id):
     if request.user.id == owner_id:
         truck = Truck.objects.get(id=truck_id)
@@ -357,8 +387,8 @@ def owners_delete(request, owner_id, truck_id):
         return redirect('home')
 
 
-# @login_required
-# @allowed_users(allowed_roles=['Eater'])
+@login_required
+@allowed_users(allowed_roles=['Eater'])
 def favourites(request, eater_id):
     if request.user.id == eater_id:
         eater = User.objects.get(id=eater_id)
@@ -376,8 +406,8 @@ def favourites(request, eater_id):
         return redirect('home')
 
 
-# @login_required
-# @allowed_users(allowed_roles=['Eater'])
+@login_required
+@allowed_users(allowed_roles=['Eater'])
 def favourites_create(request, eater_id):
     if request.user.id == eater_id:
         eater = User.objects.get(id=eater_id)
@@ -438,8 +468,10 @@ def signup(request):
                 else:
                     return redirect('home')
             else:
-                error_message = 'Invalid sign up - try again'
-        # A bad POST or a GET request, so render signup.html with an empty form
-        form = CustomUserCreationForm()
-        context = {'form': form, 'error_message': error_message}
-        return render(request, 'registration/signup.html', context)
+                return redirect('home')
+        else:
+            error_message = 'Invalid sign up - try again'
+    # A bad POST or a GET request, so render signup.html with an empty form
+    form = CustomUserCreationForm()
+    context = {'form': form, 'error_message': error_message}
+    return render(request, 'registration/signup.html', context)

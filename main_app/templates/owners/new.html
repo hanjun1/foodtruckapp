@@ -2,11 +2,11 @@
 {% block content %}
 
 <h1>New Truck</h1>
-
-<form action="{% url 'owners_create' user.id %}" method="POST">
+<form action="{% url 'owners_create' user.id %}" enctype="multipart/form-data" method="POST">
     {% csrf_token %}
     <input type="text" name="name" placeholder="Enter truck name"> <br>
     <input id="autocomplete" type="text" name="location" placeholder="Enter a location" /> <br>
+    Add Photo <input type="file" name="photo-file"><br>
     <textarea name="description" cols="30" rows="10" placeholder="Enter truck description"></textarea> <br>
     <table>
         <tr>
