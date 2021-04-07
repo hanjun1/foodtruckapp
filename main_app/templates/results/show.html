@@ -10,13 +10,9 @@
 {% else %}
 <p>Truck Rating: No user ratings for this truck yet</p>
 {% endif %}
-<p>Truck Description: {{ truck.description }}</p>
+<img src="{{truck.url}}">
 <p>Truck Location: {{ truck.location }}</p>
-{% for photo in truck.photo_set.all %}
-        <img src="{{photo.url}}">
-    {% empty %}
-        <div>No Photos Uploaded</div>
-    {% endfor %}
+<p>Truck Description: {{ truck.description }}</p>
 <hr>
 
 {% if user.is_authenticated and favourite %}

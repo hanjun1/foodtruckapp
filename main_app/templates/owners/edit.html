@@ -3,10 +3,11 @@
 
 <h1>Edit {{ truck.name }}</h1>
 
-<form action="{% url 'owners_update' owner.id truck.id %}" method="POST">
+<form action="{% url 'owners_update' owner.id truck.id %}" enctype="multipart/form-data" method="POST">
     {% csrf_token %}
     <input type="text" name="name" placeholder="Enter truck name" value="{{ truck.name }}"> <br>
-    <input type="text" name="location" placeholder="Enter location" value="{{ truck.location}}"> <br>
+    <input type="text" name="location" placeholder="Enter location" value="{{ truck.location }}"> <br>
+    <img src="{{truck.url}}"><br>
     Add/Edit Photo <input type="file" name="photo-file"><br>
     <textarea name="description" cols="30" rows="10"
         placeholder="Enter truck description">{{ truck.description }}</textarea> <br>

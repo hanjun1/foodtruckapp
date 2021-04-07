@@ -8,7 +8,7 @@ from django.contrib.auth.models import Group
 from main_app.forms import CustomUserCreationForm
 from django.contrib.auth import get_user_model
 from django.db.models import Q
-from .models import Truck, Review, Favourite, Menu, Hours, Tag, Photo
+from .models import Truck, Review, Favourite, Menu, Hours, Tag
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from .decorators import unauthenticated_user, allowed_users
@@ -102,8 +102,19 @@ def owners_new(request, owner_id):
 def owners_create(request, owner_id):
     if request.method == 'POST':
         owner = User.objects.get(id=owner_id)
+        photo_file = request.FILES.get('photo-file', None)
+        if photo_file:
+            s3 = boto3.client('s3')
+            key = uuid.uuid4().hex[:6] + photo_file.name[photo_file.name.rfind('.'):]
+            try:
+                s3.upload_fileobj(photo_file, BUCKET, key)
+                url = f"{S3_BASE_URL}{BUCKET}/{key}"
+            except:
+                print('An error occurred uploading file to S3')
+        else:
+            url ="https://s3.us-east-2.amazonaws.com/catcollectormdpn/97e068.png"
         truck = Truck.objects.create(name=request.POST.get('name'), description=request.POST.get(
-            'description'), location=request.POST.get('location'), user=owner)
+            'description'), location=request.POST.get('location'), url=url, user=owner)
         monday_open = request.POST.get('monday_open') if request.POST.get(
             'monday_open') != "" else None
         tuesday_open = request.POST.get('tuesday_open') if request.POST.get(
@@ -149,21 +160,6 @@ def owners_create(request, owner_id):
                 continue
             else:
                 Tag.objects.create(content=tag_content[i], truck=truck)
-        photo_file = request.FILES.get('photo-file', None)
-        if photo_file:
-            s3 = boto3.client('s3')
-            # need a unique "key" for S3 / needs image file extension too
-            key = uuid.uuid4().hex[:6] + photo_file.name[photo_file.name.rfind('.'):]
-            # just in case something goes wrong
-            try:
-                s3.upload_fileobj(photo_file, BUCKET, key)
-                # build the full url string
-                url = f"{S3_BASE_URL}{BUCKET}/{key}"
-                # we can assign to cat_id or cat (if you have a cat object)
-                photo = Photo(url=url, truck_id=truck.id)
-                photo.save()
-            except:
-                print('An error occurred uploading file to S3')
     return redirect('owners_home', owner_id=owner_id)
 
 
@@ -211,24 +207,12 @@ def owners_edit(request, owner_id, truck_id):
         else:
             tags_list.append('')
     menu = Menu.objects.all().filter(truck_id=truck.id)
-    photo_file = request.FILES.get('photo-file', None)
-    if photo_file:
-        s3 = boto3.client('s3')
-        key = uuid.uuid4().hex[:6] + photo_file.name[photo_file.name.rfind('.'):]
-        try:
-            s3.upload_fileobj(photo_file, BUCKET, key)
-            url = f"{S3_BASE_URL}{BUCKET}/{key}"
-            photo = Photo(url=url, truck_id=truck_id)
-            photo.save()
-        except:
-            print('An error occurred uploading file to S3')
     context = {
         'owner': owner,
         'truck': truck,
         'hours': hours,
         'tags': tags_list,
         'menu': menu,
-        # 'photo': photo,
     }
     return render(request, 'owners/edit.html', context)
 
@@ -239,6 +223,19 @@ def owners_update(request, owner_id, truck_id):
     truck.name = request.POST.get('name')
     truck.description = request.POST.get('description')
     truck.location = request.POST.get('location')
+    photo_file = request.FILES.get('photo-file', None)
+    if photo_file:
+        s3 = boto3.client('s3')
+        key = uuid.uuid4().hex[:6] + photo_file.name[photo_file.name.rfind('.'):]
+        try:
+            s3.upload_fileobj(photo_file, BUCKET, key)
+            url = f"{S3_BASE_URL}{BUCKET}/{key}"
+            print('url: ', url)
+        except:
+            print('An error occurred uploading file to S3')
+    else:
+        url ="https://s3.us-east-2.amazonaws.com/catcollectormdpn/97e068.png"
+    truck.url = url
     truck.save()
     monday_open = request.POST.get('monday_open') if request.POST.get(
         'monday_open') != "" else None
@@ -315,17 +312,6 @@ def owners_update(request, owner_id, truck_id):
             Tag.objects.create(content=tag_content[i], truck=truck)
         else:
             continue
-    photo_file = request.FILES.get('photo-file', None)
-    if photo_file:
-        s3 = boto3.client('s3')
-        key = uuid.uuid4().hex[:6] + photo_file.name[photo_file.name.rfind('.'):]
-        try:
-            s3.upload_fileobj(photo_file, BUCKET, key)
-            url = f"{S3_BASE_URL}{BUCKET}/{key}"
-            photo = Photo(url=url, truck_id=truck.id)
-            photo.save()
-        except:
-            print('An error occurred uploading file to S3')
     return redirect('owners_home', owner_id=owner_id)
 
 @login_required
@@ -335,7 +321,8 @@ def favourites(request, eater_id):
     favourites = Favourite.objects.all().filter(user=eater)
     context = {
         'eater': eater,
-        'favourites': favourites
+        'favourites': favourites,
+
     }
     return render(request, 'users/favourites.html', context)
 
@@ -378,22 +365,3 @@ def signup(request):
     context = {'form': form, 'error_message': error_message}
     return render(request, 'registration/signup.html', context)
 
-
-# def add_photo(request, owner_id):
-#     # photo-file will be the "name" attribute on the <input type="file">
-#     photo_file = request.FILES.get('photo-file', None)
-#     if photo_file:
-#         s3 = boto3.client('s3')
-#         # need a unique "key" for S3 / needs image file extension too
-#         key = uuid.uuid4().hex[:6] + photo_file.name[photo_file.name.rfind('.'):]
-#         # just in case something goes wrong
-#         try:
-#             s3.upload_fileobj(photo_file, BUCKET, key)
-#             # build the full url string
-#             url = f"{S3_BASE_URL}{BUCKET}/{key}"
-#             # we can assign to cat_id or cat (if you have a cat object)
-#             photo = Photo(url=url, owner_id=owner_id)
-#             photo.save()
-#         except:
-#             print('An error occurred uploading file to S3')
-#     return redirect('owners_new')

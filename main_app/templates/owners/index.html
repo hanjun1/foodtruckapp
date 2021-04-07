@@ -2,6 +2,7 @@
 {% block content %}
 
 {% for truck in trucks %}
+<img src="{{truck.url}}">
 <p>{{ truck.name }}</p>
 <p>{{ truck.overall_rating }}</p>
 <a href="{% url 'owners_edit' user.id truck.id %}">Edit</a>
