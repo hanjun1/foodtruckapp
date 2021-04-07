@@ -2,7 +2,7 @@
 {% block content %}
 
 <h1>New Truck</h1>
-<form action="{% url 'owners_create' user.id %}" enctype="multipart/form-data" method="POST">
+<form name="new" action="{% url 'owners_create' user.id %}" onsubmit="return validateForm()" enctype="multipart/form-data" method="POST">
     {% csrf_token %}
     <input type="text" name="name" placeholder="Enter truck name"> <br>
     <input id="autocomplete" type="text" name="location" placeholder="Enter a location" /> <br>
@@ -16,38 +16,38 @@
         </tr>
         <tr>
             <td>Monday</td>
-            <td><input type="time" name="monday_open"></td>
-            <td><input type="time" name="monday_close"></td>
+            <td><input type="time" class="open" name="monday_open"></td>
+            <td><input type="time" class="close" name="monday_close"></td>
         </tr>
         <tr>
             <td>Tuesday</td>
-            <td><input type="time" name="tuesday_open"></td>
-            <td><input type="time" name="tuesday_close"></td>
+            <td><input type="time" class="open" name="tuesday_open"></td>
+            <td><input type="time" class="close" name="tuesday_close"></td>
         </tr>
         <tr>
             <td>Wednesday</td>
-            <td><input type="time" name="wednesday_open"></td>
-            <td><input type="time" name="wednesday_close"></td>
+            <td><input type="time" class="open" name="wednesday_open"></td>
+            <td><input type="time" class="close" name="wednesday_close"></td>
         </tr>
         <tr>
             <td>Thursday</td>
-            <td><input type="time" name="thursday_open"></td>
-            <td><input type="time" name="thursday_close"></td>
+            <td><input type="time" class="open" name="thursday_open"></td>
+            <td><input type="time" class="close" name="thursday_close"></td>
         </tr>
         <tr>
             <td>Friday</td>
-            <td><input type="time" name="friday_open"></td>
-            <td><input type="time" name="friday_close"></td>
+            <td><input type="time" class="open" name="friday_open"></td>
+            <td><input type="time" class="close" name="friday_close"></td>
         </tr>
         <tr>
             <td>Saturday</td>
-            <td><input type="time" name="saturday_open"></td>
-            <td><input type="time" name="saturday_close"></td>
+            <td><input type="time" class="open" name="saturday_open"></td>
+            <td><input type="time" class="close" name="saturday_close"></td>
         </tr>
         <tr>
             <td>Sunday</td>
-            <td><input type="time" name="sunday_open"></td>
-            <td><input type="time" name="sunday_close"></td>
+            <td><input type="time" class="open" name="sunday_open"></td>
+            <td><input type="time" class="close" name="sunday_close"></td>
         </tr>
     </table>
     <p>Tags</p>
@@ -106,6 +106,17 @@
             menuTable.deleteRow(btn.parentElement.parentElement.rowIndex)
         })
     })
+    let openHour = document.querySelectorAll('.open')
+    let closeHour = document.querySelectorAll('.close')
+    validateForm = () => {
+        for (i = 0; i < openHour.length; i++) {
+            if (openHour[i].value != "" && closeHour[i].value == "") {
+                    closeHour[i].required = true
+                    alert('enter closing time')
+                    return false;
+            }
+        }
+    }
 </script>
 <script
     src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyDtN4w76X1h9sk9jNP8SvP4jF4YIuLv2jA"></script>
