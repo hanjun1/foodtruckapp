@@ -68,18 +68,18 @@
         {% if menu %}
         {% for menu_item in menu %}
         <tr>
-            <td><input type="text" name="food_name" value="{{ menu_item.food_name}}"></td>
-            <td><input type="text" name="food_description" value="{{ menu_item.food_description }}"></td>
-            <td><input type="number" min="0.00" max="10000.00" step="0.01" name="food_price"
+            <td><input type="text" class="food-name" name="food_name" value="{{ menu_item.food_name}}"></td>
+            <td><input type="text" class="food-description" name="food_description" value="{{ menu_item.food_description }}"></td>
+            <td><input type="number" class="food-price" min="0.00" max="10000.00" step="0.01" name="food_price"
                     value="{{ menu_item.food_price}}"></td>
             <td><button type="button" class="delete">-</button></td>
         </tr>
         {% endfor %}
         {% else %}
         <tr>
-            <td><input type="text" name="food_name"></td>
-            <td><input type="text" name="food_description"></td>
-            <td><input type="number" min="0.00" max="10000.00" step="0.01" name="food_price" placeholder="0.00"></td>
+            <td><input type="text" class="food-name" name="food_name"></td>
+            <td><input type="text" class="food-description" name="food_description"></td>
+            <td><input type="number" class="food-price" min="0.00" max="10000.00" step="0.01" name="food_price" placeholder="0.00"></td>
             <td><button type="button" class="delete">-</button></td>
         </tr>
         {% endif %}
@@ -97,9 +97,9 @@
         let cell2 = newRow.insertCell(1);
         let cell3 = newRow.insertCell(2);
         let cell4 = newRow.insertCell(3);
-        cell1.innerHTML = `<input type="text" name="food_name">`
-        cell2.innerHTML = `<input type="text" name="food_description">`
-        cell3.innerHTML = `<input type="number" min="0.00" max="10000.00" step="0.01" name="food_price" placeholder="0.00">`
+        cell1.innerHTML = `<input type="text" class="food-name" name="food_name">`
+        cell2.innerHTML = `<input type="text" class="food-description" name="food_description">`
+        cell3.innerHTML = `<input type="number" class="food-price" min="0.00" max="10000.00" step="0.01" name="food_price" placeholder="0.00">`
         cell4.innerHTML = `<button type="button" class="delete">-</button>`
         cell4.children[0].addEventListener('click', () => {
             menuTable.deleteRow(cell4.children[0].parentElement.parentElement.rowIndex)
@@ -113,11 +113,22 @@
     })
     let openHour = document.querySelectorAll('.open')
     let closeHour = document.querySelectorAll('.close')
+    let foodName = document.querySelectorAll('.food-name')
+    let foodDescription = document.querySelectorAll('.food-description')
+    let foodPrice = document.querySelectorAll('.food-price')
     validateForm = () => {
         for (i = 0; i < openHour.length; i++) {
             if (openHour[i].value != "" && closeHour[i].value == "") {
                     closeHour[i].required = true
                     alert('enter closing time')
+                    return false;
+            }
+        }
+        for (i = 0; i < foodName.length; i++) {
+            if (foodName[i].value != "" && foodDescription[i].value == "" || foodName[i].value != "" && foodPrice[i].value == "") {
+                    foodDescription[i].required = true
+                    foodPrice[i].required = true
+                    alert('complete food setup')
                     return false;
             }
         }
