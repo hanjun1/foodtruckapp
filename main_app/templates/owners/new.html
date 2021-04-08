@@ -3,16 +3,22 @@
 
 <div class="container">
     <h1>NEW TRUCK</h1>
-<form name="new" action="{% url 'owners_create' user.id %}" onsubmit="return validateForm()" enctype="multipart/form-data" method="POST">
+<form class="needs-validation" novalidate name="new" action="{% url 'owners_create' user.id %}" onsubmit="return validateForm()" enctype="multipart/form-data" method="POST">
     {% csrf_token %}
-    <div class="form-group">
+    <div class="form-group validate-me">
         <label>NAME</label>
-        <input type="text" name="name" class="form-control" placeholder="Enter truck name">
+        <input type="text" name="name" class="form-control" placeholder="Enter truck name" required>
+        <div class="invalid-feedback">
+            Please enter the name of your truck.
+          </div>
     </div>
     <br>
-    <div class="form-group">
+    <div class="form-group validate-me">
         <label>CURRENT LOCATION</label>
-        <input id="autocomplete" type="text" name="location" class="form-control">
+        <input id="autocomplete" type="text" name="location" class="form-control" required>
+        <div class="invalid-feedback">
+            Please enter your current location.
+          </div>
     </div>
     <br>
     <div class="form-group">
@@ -20,9 +26,12 @@
         <input type="file" name="photo-file" class="form-control">
     </div>
     <br>
-    <div class="form-group">
+    <div class="form-group validate-me">
         <label>DESCRIPTION</label>
-        <textarea class="form-control" name="description" rows="6" placeholder="Enter truck description"></textarea>
+        <textarea class="form-control" name="description" rows="6" placeholder="Enter truck description" required></textarea>
+        <div class="invalid-feedback">
+            Please enter the description of your truck.
+          </div>
     </div>
     <br>
     <div class="form-group">
@@ -36,37 +45,37 @@
         <tr>
             <td>Monday</td>
             <td><input type="time" class="open-hour" name="monday_open"></td>
-            <td><input type="time" class="close-hour" name="monday_close"></td>
+            <td><input type="time" class="close-hour validate-me" name="monday_close"></td>
         </tr>
         <tr>
             <td>Tuesday</td>
             <td><input type="time" class="open-hour" name="tuesday_open"></td>
-            <td><input type="time" class="close-hour" name="tuesday_close"></td>
+            <td><input type="time" class="close-hou validate-mer" name="tuesday_close"></td>
         </tr>
         <tr>
             <td>Wednesday</td>
             <td><input type="time" class="open-hour" name="wednesday_open"></td>
-            <td><input type="time" class="close-hour" name="wednesday_close"></td>
+            <td><input type="time" class="close-hour validate-me" name="wednesday_close"></td>
         </tr>
         <tr>
             <td>Thursday</td>
             <td><input type="time" class="open-hour" name="thursday_open"></td>
-            <td><input type="time" class="close-hour" name="thursday_close"></td>
+            <td><input type="time" class="close-hour validate-me" name="thursday_close"></td>
         </tr>
         <tr>
             <td>Friday</td>
             <td><input type="time" class="open-hour" name="friday_open"></td>
-            <td><input type="time" class="close-hour" name="friday_close"></td>
+            <td><input type="time" class="close-hour validate-me" name="friday_close"></td>
         </tr>
         <tr>
             <td>Saturday</td>
             <td><input type="time" class="open-hour" name="saturday_open"></td>
-            <td><input type="time" class="close-hour" name="saturday_close"></td>
+            <td><input type="time" class="close-hour validate-me" name="saturday_close"></td>
         </tr>
         <tr>
             <td>Sunday</td>
             <td><input type="time" class="open-hour" name="sunday_open"></td>
-            <td><input type="time" class="close-hour" name="sunday_close"></td>
+            <td><input type="time" class="close-hour validate-me" name="sunday_close"></td>
         </tr>
     </table>
     </div>
@@ -96,7 +105,7 @@
         </div>
     </div>
     <br>
-    <div class="form-group">
+    <div class="form-group validate-me">
         <label>MENU</label>
     <table class="table menu">
         <tr>
@@ -163,17 +172,16 @@
     validateForm = () => {
         for (i = 0; i < openHour.length; i++) {
             if (openHour[i].value != "" && closeHour[i].value == "") {
-                    closeHour[i].required = true
-                    alert('enter closing time')
-                    return false;
+                closeHour[i].required = true
+                alert('enter closing time')
+                return false;
             }
         }
         for (i = 0; i < foodName.length; i++) {
             if (foodName[i].value != "" && foodDescription[i].value == "" || foodName[i].value != "" && foodPrice[i].value == "") {
-                    foodDescription[i].required = true
-                    foodPrice[i].required = true
-                    alert('complete food setup')
-                    return false;
+                foodDescription[i].required = true
+                foodPrice[i].required = true
+                return false;
             }
         }
     }
@@ -185,4 +193,24 @@
         document.getElementById("autocomplete")
     );
 </script>
+<script>
+    (function() {
+      'use strict';
+      window.addEventListener('load', function() {
+        var forms = document.getElementsByClassName('needs-validation');
+        var validateGroup = document.getElementsByClassName('validate-me');
+        var validation = Array.prototype.filter.call(forms, function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        for (var i = 0; i < validateGroup.length; i++) {
+                            validateGroup[i].classList.add('was-validated');
+                        }
+                    }, false);
+                });
+            }, false);
+    })();
+    </script>
 {% endblock %}

@@ -4,16 +4,16 @@
 
 <div class="container">
     <h1>Edit {{ truck.name }}</h1>
-<form action="{% url 'owners_update' owner.id truck.id %}" onsubmit="return validateForm()" enctype="multipart/form-data" method="POST">
+<form class="needs-validation" novalidate action="{% url 'owners_update' owner.id truck.id %}" onsubmit="return validateForm()" enctype="multipart/form-data" method="POST">
     {% csrf_token %}
-    <div class="form-group">
+    <div class="form-group validate-me">
         <label>NAME</label>
-        <input type="text" name="name" class="form-control" placeholder="Enter truck name" value="{{ truck.name }}">
+        <input type="text" name="name" class="form-control" placeholder="Enter truck name" value="{{ truck.name }}" required>
     </div>
     <br>
-    <div class="form-group">
+    <div class="form-group validate-me">
         <label>CURRENT LOCATION</label>
-        <input id="autocomplete" type="text" name="location" class="form-control"  value="{{ truck.location}}">
+        <input id="autocomplete" type="text" name="location" class="form-control"  value="{{ truck.location}}" required>
     </div>
     <br>
     <img src="{{truck.url}}">
@@ -23,9 +23,9 @@
         <input type="file" name="photo-file" class="form-control">
     </div>
     <br>
-    <div class="form-group">
+    <div class="form-group validate-me">
         <label>DESCRIPTION</label>
-        <textarea class="form-control" name="description" rows="6" placeholder="Enter truck description">{{ truck.description }}</textarea>
+        <textarea class="form-control" name="description" rows="6" placeholder="Enter truck description" required>{{ truck.description }}</textarea>
     </div>
     <br>
     <div class="form-group">
@@ -99,7 +99,7 @@
         </div>
     </div>
     <br>
-    <div class="form-group">
+    <div class="form-group  validate-me">
         <label>MENU</label>
     <table class="table menu">
         <tr>
@@ -173,7 +173,6 @@
             if (foodName[i].value != "" && foodDescription[i].value == "" || foodName[i].value != "" && foodPrice[i].value == "") {
                     foodDescription[i].required = true
                     foodPrice[i].required = true
-                    alert('complete food setup')
                     return false;
             }
         }
@@ -186,5 +185,24 @@
         document.getElementById("autocomplete")
     );
 </script>
-
+<script>
+    (function() {
+      'use strict';
+      window.addEventListener('load', function() {
+        var forms = document.getElementsByClassName('needs-validation');
+        var validateGroup = document.getElementsByClassName('validate-me');
+        var validation = Array.prototype.filter.call(forms, function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        for (var i = 0; i < validateGroup.length; i++) {
+                            validateGroup[i].classList.add('was-validated');
+                        }
+                    }, false);
+                });
+            }, false);
+    })();
+    </script>
 {% endblock %}

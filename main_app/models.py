@@ -9,7 +9,7 @@ class User(AbstractUser):
         Eater = "Eater"
         Owner = "Owner"
     # sets type of user
-    type = models.CharField(_("Type"), max_length=50,
+    type = models.CharField(_("User Type"), max_length=50,
                             choices=Types.choices, default=Types.Eater)
 
     name = models.CharField(_("Name of User"), blank=True, max_length=255)
