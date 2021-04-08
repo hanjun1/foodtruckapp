@@ -60,7 +60,7 @@ def results_show(request, truck_id):
     truck = Truck.objects.get(id=truck_id)
     reviews = Review.objects.all().filter(truck=truck)
     user = request.user
-
+    hours = Hours.objects.get(truck_id=truck_id)
     if user.id != None:
         favourite = Favourite.objects.all().filter(user=user, truck=truck)
         person_review = Review.objects.all().filter(user=user, truck=truck)
@@ -71,7 +71,8 @@ def results_show(request, truck_id):
         'truck': truck,
         'reviews': reviews,
         'favourite': favourite,
-        'person_review': person_review
+        'person_review': person_review,
+        'hours': hours,
     }
     return render(request, 'results/show.html', context)
 
