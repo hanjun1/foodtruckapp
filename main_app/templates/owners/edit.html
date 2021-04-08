@@ -1,17 +1,36 @@
 {% extends 'base.html'%}
 {% block content %}
 
-<h1>Edit {{ truck.name }}</h1>
 
+<div class="container">
+    <h1>Edit {{ truck.name }}</h1>
 <form action="{% url 'owners_update' owner.id truck.id %}" onsubmit="return validateForm()" enctype="multipart/form-data" method="POST">
     {% csrf_token %}
-    <input type="text" name="name" placeholder="Enter truck name" value="{{ truck.name }}"> <br>
-    <input id="autocomplete" type="text" placeholder="Enter a location" name="location" value="{{ truck.location}}" />
-    <img src="{{truck.url}}"><br>
-    Add/Edit Photo <input type="file" name="photo-file"><br>
-    <textarea name="description" cols="30" rows="10"
-        placeholder="Enter truck description">{{ truck.description }}</textarea> <br>
-    <table>
+    <div class="form-group">
+        <label>NAME</label>
+        <input type="text" name="name" class="form-control" placeholder="Enter truck name" value="{{ truck.name }}">
+    </div>
+    <br>
+    <div class="form-group">
+        <label>CURRENT LOCATION</label>
+        <input id="autocomplete" type="text" name="location" class="form-control"  value="{{ truck.location}}">
+    </div>
+    <br>
+    <img src="{{truck.url}}">
+    <br>
+    <div class="form-group">
+        <label>ADD/EDIT PHOTO</label>
+        <input type="file" name="photo-file" class="form-control">
+    </div>
+    <br>
+    <div class="form-group">
+        <label>DESCRIPTION</label>
+        <textarea class="form-control" name="description" rows="6" placeholder="Enter truck description">{{ truck.description }}</textarea>
+    </div>
+    <br>
+    <div class="form-group">
+        <label>OPERATING HOURS</label>    
+    <table class="table">
         <tr>
             <th>Day</th>
             <th>Open Hours</th>
@@ -53,41 +72,66 @@
             <td><input type="time" class="close" name="sunday_close" value="{{ hours.sunday_close }}"></td>
         </tr>
     </table>
-    <p>Tags</p>
-    <input type="text" name="content" value="{{ tags.0 }}"> <input type="text" name="content" value="{{ tags.1 }}">
-    <input type="text" name="content" value="{{ tags.2 }}"><br>
-    <input type="text" name="content" value="{{ tags.3 }}"> <input type="text" name="content" value="{{ tags.4 }}">
-    <input type="text" name="content" value="{{ tags.5 }}">
-    <table class="menu">
+    </div>
+    <br>
+    <div class="form-row">
+        <label>TAGS</label>
+        <div class="form-group col-md-6">
+            <input type="text" name="content" class="form-control" placeholder="Enter a tag" value="{{ tags.0 }}">
+        </div>
+        <div class="form-group col-md-6">
+            <input type="text" name="content" class="form-control" placeholder="Enter a tag" value="{{ tags.1 }}">
+        </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <input type="text" name="content" class="form-control" placeholder="Enter a tag" value="{{ tags.2 }}">
+        </div>
+        <div class="form-group col-md-6">
+            <input type="text" name="content" class="form-control" placeholder="Enter a tag" value="{{ tags.3 }}">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <input type="text" name="content" class="form-control" placeholder="Enter a tag" value="{{ tags.4 }}">
+        </div>
+        <div class="form-group col-md-6">
+            <input type="text" name="content" class="form-control" placeholder="Enter a tag" value="{{ tags.5 }}">
+        </div>
+    </div>
+    <br>
+    <div class="form-group">
+        <label>MENU</label>
+    <table class="table menu">
         <tr>
             <th>Food Name</th>
-            <th>Food Description</th>
+            <th>Description</th>
             <th>Price</th>
             <th></th>
         </tr>
         {% if menu %}
         {% for menu_item in menu %}
         <tr>
-            <td><input type="text" class="food-name" name="food_name" value="{{ menu_item.food_name}}"></td>
-            <td><input type="text" class="food-description" name="food_description" value="{{ menu_item.food_description }}"></td>
-            <td><input type="number" class="food-price" min="0.00" max="10000.00" step="0.01" name="food_price"
-                    value="{{ menu_item.food_price}}"></td>
-            <td><button type="button" class="delete">-</button></td>
+            <td><input type="text" class="form-control food-name" name="food_name" value="{{ menu_item.food_name}}"></td>
+            <td><input type="text" class="form-control food-description" name="food_description" value="{{ menu_item.food_description }}"></td>
+            <td><input type="number" class="form-control food-price" min="0.00" max="10000.00" step="0.01" name="food_price" value="{{ menu_item.food_price}}"></td>
+            <td><input type="submit" class="btn delete"style="width: 100%; background-color: #BCD5E3;" value="-"></td>
         </tr>
         {% endfor %}
         {% else %}
         <tr>
-            <td><input type="text" class="food-name" name="food_name"></td>
-            <td><input type="text" class="food-description" name="food_description"></td>
-            <td><input type="number" class="food-price" min="0.00" max="10000.00" step="0.01" name="food_price" placeholder="0.00"></td>
-            <td><button type="button" class="delete">-</button></td>
+            <td><input type="text" class="form-control food-name" name="food_name"></td>
+            <td><input type="text" class="form-control food-description" name="food_description"></td>
+            <td><input type="number" class="form-control food-price" min="0.00" max="10000.00" step="0.01" name="food_price" placeholder="0.00"></td>
+            <td><input type="submit" class="btn delete"style="width: 100%; background-color: #BCD5E3;" value="-"></td>
         </tr>
         {% endif %}
     </table>
-    <button type="button" class="new-menu">Add More Items</button>
+    </div>
+    <button type="button" class="btn new-menu" style="width: 100%; background-color: #BCD5E3;">Add More Items</button>
     <br> <br>
-    <button>Update Listing</button>
+    <button class="btn" style="width: 100%; background-color: #BCD5E3;">Update Listing</button>
 </form>
+</div>
 <script>
     let menuTable = document.querySelector('.menu')
     let newMenuBtn = document.querySelector('.new-menu')
@@ -97,10 +141,10 @@
         let cell2 = newRow.insertCell(1);
         let cell3 = newRow.insertCell(2);
         let cell4 = newRow.insertCell(3);
-        cell1.innerHTML = `<input type="text" class="food-name" name="food_name">`
-        cell2.innerHTML = `<input type="text" class="food-description" name="food_description">`
-        cell3.innerHTML = `<input type="number" class="food-price" min="0.00" max="10000.00" step="0.01" name="food_price" placeholder="0.00">`
-        cell4.innerHTML = `<button type="button" class="delete">-</button>`
+        cell1.innerHTML = `<input type="text" class="form-control food-name" name="food_name">`
+        cell2.innerHTML = `<input type="text" class="form-control food-description" name="food_description">`
+        cell3.innerHTML = `<input type="number" class="form-control food-price" min="0.00" max="10000.00" step="0.01" name="food_price" placeholder="0.00">`
+        cell4.innerHTML = `<input type="submit" class="btn delete"style="width: 100%; background-color: #BCD5E3;" value="-">`
         cell4.children[0].addEventListener('click', () => {
             menuTable.deleteRow(cell4.children[0].parentElement.parentElement.rowIndex)
         })
