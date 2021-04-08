@@ -452,33 +452,33 @@ def favourites_delete(request, eater_id, favourite_id):
 
 
 def signup(request):
-    if request.user:
-        return redirect('home')
-    else:
-        error_message = ''
-        if request.method == 'POST':
-            # This is how to create a 'user' form object
-            # that includes the data from the browser
-            form = CustomUserCreationForm(request.POST)
-            if form.is_valid():
-                # This will add the user to the database
-                user = form.save()
-                if user.type == 'Eater':
-                    group = Group.objects.get(name='Eater')
-                    user.groups.add(group)
-                else:
-                    group = Group.objects.get(name='Owner')
-                    user.groups.add(group)
-                # This is how we log a user in via code
-                login(request, user)
-                if user.type == 'Owner':
-                    return redirect('owners_home', owner_id=user.id)
-                else:
-                    return redirect('home')
+    # if request.user:
+    #     return redirect('home')
+
+    error_message = ''
+    if request.method == 'POST':
+        # This is how to create a 'user' form object
+        # that includes the data from the browser
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            # This will add the user to the database
+            user = form.save()
+            if user.type == 'Eater':
+                group = Group.objects.get(name='Eater')
+                user.groups.add(group)
+            else:
+                group = Group.objects.get(name='Owner')
+                user.groups.add(group)
+            # This is how we log a user in via code
+            login(request, user)
+            if user.type == 'Owner':
+                return redirect('owners_home', owner_id=user.id)
             else:
                 return redirect('home')
         else:
-            error_message = 'Invalid sign up - try again'
+            return redirect('home')
+    else:
+        error_message = 'Invalid sign up - try again'
     # A bad POST or a GET request, so render signup.html with an empty form
     form = CustomUserCreationForm()
     context = {'form': form, 'error_message': error_message}
