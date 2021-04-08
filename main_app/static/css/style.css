@@ -489,3 +489,12 @@ table {
 .favourites-title {
   margin: 20px;
 }
+
+.form-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.signup {
+  width: 80%;
+}

@@ -10,24 +10,19 @@
         <label>NAME</label>
         <input type="text" name="name" class="form-control" placeholder="Enter truck name" value="{{ truck.name }}" required>
     </div>
-    <br>
     <div class="form-group validate-me">
         <label>CURRENT LOCATION</label>
         <input id="autocomplete" type="text" name="location" class="form-control"  value="{{ truck.location}}" required>
     </div>
-    <br>
     <img src="{{truck.url}}">
-    <br>
     <div class="form-group">
         <label>ADD/EDIT PHOTO</label>
         <input type="file" name="photo-file" class="form-control">
     </div>
-    <br>
     <div class="form-group validate-me">
         <label>DESCRIPTION</label>
         <textarea class="form-control" name="description" rows="6" placeholder="Enter truck description" required>{{ truck.description }}</textarea>
     </div>
-    <br>
     <div class="form-group">
         <label>OPERATING HOURS</label>    
     <table class="table">
@@ -73,7 +68,6 @@
         </tr>
     </table>
     </div>
-    <br>
     <div class="form-row">
         <label>TAGS</label>
         <div class="form-group col-md-6">
@@ -98,7 +92,6 @@
             <input type="text" name="content" class="form-control" placeholder="Enter a tag" value="{{ tags.5 }}">
         </div>
     </div>
-    <br>
     <div class="form-group  validate-me">
         <label>MENU</label>
     <table class="table menu">
@@ -127,12 +120,10 @@
         {% endif %}
     </table>
     </div>
-    <button type="button" class="btn new-menu" style="width: 100%; background-color: #BCD5E3;">Add More Items</button>
-    <br> <br>
-    <button class="btn" style="width: 100%; background-color: #BCD5E3;">Update Listing</button>
+    <button type="button" class="btn new-menu" style="width: 100%; margin-bottom: 20px; background-color: #BCD5E3;">Add More Items</button>
+    <button class="btn" style="width: 100%; margin-bottom: 20px; background-color: #BCD5E3;">Update Listing</button>
 </form>
 </div>
-<br>
 <script>
     let menuTable = document.querySelector('.menu')
     let newMenuBtn = document.querySelector('.new-menu')

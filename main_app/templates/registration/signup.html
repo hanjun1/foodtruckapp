@@ -1,25 +1,26 @@
 {% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+
 {% block content %}
 
-<div class="container mx-auto align-items-center justify-content-center">
+<div class="signup container">
   <form method="post" action="{% url 'signup' %}">
     {% csrf_token %}
     <div class="row">
       <div class="col text-center">
         {% for field in form %}
               <div class="form-group">
-                  <label class="mylabel">{{ field.label }}</label>
                   <div class="form-group">
-                    {{ field }}
+                    {{ field|as_crispy_field }}
                   </div>
               </div>
-              <br>
         {% endfor %}
       </div>
     </div>
     <div class="row">
       <div class="col text-center">
-        <input class="btn" style="width: 50%; background-color: #BCD5E3;" type="submit" value="Register"><br>
+        <input class="btn" style="width: 100%; background-color: #BCD5E3;" type="submit" value="Register"><br>
         <input type="hidden" name="next" value="{{ next }}">
       </div>
     </div>
