@@ -35,38 +35,38 @@
         </tr>
         <tr>
             <td>Monday</td>
-            <td><input type="time" class="open" name="monday_open"></td>
-            <td><input type="time" class="close" name="monday_close"></td>
+            <td><input type="time" class="open-hour" name="monday_open"></td>
+            <td><input type="time" class="close-hour" name="monday_close"></td>
         </tr>
         <tr>
             <td>Tuesday</td>
-            <td><input type="time" class="open" name="tuesday_open"></td>
-            <td><input type="time" class="close" name="tuesday_close"></td>
+            <td><input type="time" class="open-hour" name="tuesday_open"></td>
+            <td><input type="time" class="close-hour" name="tuesday_close"></td>
         </tr>
         <tr>
             <td>Wednesday</td>
-            <td><input type="time" class="open" name="wednesday_open"></td>
-            <td><input type="time" class="close" name="wednesday_close"></td>
+            <td><input type="time" class="open-hour" name="wednesday_open"></td>
+            <td><input type="time" class="close-hour" name="wednesday_close"></td>
         </tr>
         <tr>
             <td>Thursday</td>
-            <td><input type="time" class="open" name="thursday_open"></td>
-            <td><input type="time" class="close" name="thursday_close"></td>
+            <td><input type="time" class="open-hour" name="thursday_open"></td>
+            <td><input type="time" class="close-hour" name="thursday_close"></td>
         </tr>
         <tr>
             <td>Friday</td>
-            <td><input type="time" class="open" name="friday_open"></td>
-            <td><input type="time" class="close" name="friday_close"></td>
+            <td><input type="time" class="open-hour" name="friday_open"></td>
+            <td><input type="time" class="close-hour" name="friday_close"></td>
         </tr>
         <tr>
             <td>Saturday</td>
-            <td><input type="time" class="open" name="saturday_open"></td>
-            <td><input type="time" class="close" name="saturday_close"></td>
+            <td><input type="time" class="open-hour" name="saturday_open"></td>
+            <td><input type="time" class="close-hour" name="saturday_close"></td>
         </tr>
         <tr>
             <td>Sunday</td>
-            <td><input type="time" class="open" name="sunday_open"></td>
-            <td><input type="time" class="close" name="sunday_close"></td>
+            <td><input type="time" class="open-hour" name="sunday_open"></td>
+            <td><input type="time" class="close-hour" name="sunday_close"></td>
         </tr>
     </table>
     </div>
@@ -100,7 +100,7 @@
         <label>MENU</label>
     <table class="table menu">
         <tr>
-            <th>Food Name</th>
+            <th>Menu Item</th>
             <th>Description</th>
             <th>Price</th>
             <th></th>
@@ -130,7 +130,7 @@
     <button class="btn" style="width: 100%; background-color: #BCD5E3;">Create New Listing</button>
 </form>
 </div>
-
+<br>
 
 <script>
     let menuTable = document.querySelector('.menu')
@@ -155,8 +155,8 @@
             menuTable.deleteRow(btn.parentElement.parentElement.rowIndex)
         })
     })
-    let openHour = document.querySelectorAll('.open')
-    let closeHour = document.querySelectorAll('.close')
+    let openHour = document.querySelectorAll('.open-hour')
+    let closeHour = document.querySelectorAll('.close-hour')
     let foodName = document.querySelectorAll('.food-name')
     let foodDescription = document.querySelectorAll('.food-description')
     let foodPrice = document.querySelectorAll('.food-price')
