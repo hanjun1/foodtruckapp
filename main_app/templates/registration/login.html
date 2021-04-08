@@ -1,15 +1,28 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h1>Log In</h1>
-
-<form method="post" action="{% url 'login' %}">
-  {% csrf_token %}
-  <!-- Username: <input name="username">
-    Password: <input name="password"> -->
-  {{ form.as_p }}
-  <input type="submit" value="login">
-  <input type="hidden" name="next" value="{{ next }}">
-</form>
+<div class="container mx-auto d-flex align-items-center justify-content-center">
+  <form method="post" action="{% url 'login' %}">
+    {% csrf_token %}
+    <div class="form-group">
+      <label>Username</label>
+      <input type="text" class="form-control" name="username">
+    </div>
+    <br>
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" class="form-control bg-white" name="password">
+    </div>
+    <br>
+    <!-- {{ form.as_p }} -->
+    <div class="row">
+      <div class="col text-center">
+        <input class="btn" style="width: 100%; background-color: #BCD5E3;" type="submit" value="Login"><br>
+        <a href="{% url 'signup' %}" class="btn"style="width: 100%;">Register</a>
+        <input type="hidden" name="next" value="{{ next }}">
+      </div>
+    </div>
+  </form>
+</div>
 
 {% endblock %}
