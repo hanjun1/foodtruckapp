@@ -92,7 +92,6 @@ body {
 }
 
 .sub-index-main {
-  /* min-height: 90vh; */
   margin-top: 40vh;
 }
 
@@ -106,6 +105,13 @@ body {
   margin: 10px;
 }
 
+.index-main button {
+  background: #bcd5ef;
+  color: #000;
+  border: 1px solid #bcd5ef;
+  width: 100%;
+}
+
 .index-form-showall button {
   width: 100%;
 }
@@ -113,18 +119,6 @@ body {
 .input-group .btn {
   z-index: 0;
 }
-
-/* .sub-main {
-  display: flex;
-  flex-direction: column;
-  justify-content: center; 
-  max-width: 500px;
-  text-align: center;
-  margin: 10px;
-}
-
-.index-form {
-} */
 
 /* RESULTS - INDEX */
 

@@ -8,17 +8,15 @@
       <label>Username</label>
       <input type="text" class="form-control" name="username">
     </div>
-    <br>
     <div class="form-group">
       <label>Password</label>
       <input type="password" class="form-control bg-white" name="password">
     </div>
-    <br>
     <!-- {{ form.as_p }} -->
     <div class="row">
       <div class="col text-center">
         <input class="btn" style="width: 100%; background-color: #BCD5E3;" type="submit" value="Login"><br>
-        <a href="{% url 'signup' %}" class="btn"style="width: 100%;">Register</a>
+        <a href="{% url 'signup' %}" class="btn" style="width: 100%;">Register</a>
         <input type="hidden" name="next" value="{{ next }}">
       </div>
     </div>
