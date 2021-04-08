@@ -489,3 +489,30 @@ table {
 .favourites-title {
   margin: 20px;
 }
+
+/* OWNER'S PORTAL */
+
+.owner-truck-button-container {
+  border-bottom: 1px solid #e6e6e6;
+}
+
+.owner-truck-button-container button {
+  background: #bcd5ef;
+  color: #000;
+  border: none;
+  width: 49%;
+  margin-bottom: 1rem;
+}
+
+.owner-truck-add {
+  margin-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.owner-truck-add button {
+  background: #bcd5ef;
+  color: #000;
+  border: none;
+  width: 100%;
+  margin-bottom: 1rem;
+}

@@ -123,7 +123,12 @@ def owners_home(request, owner_id):
     if request.user.id == owner_id:
         owner = User.objects.get(id=owner_id)
         trucks = Truck.objects.all().filter(user=owner)
-        return render(request, 'owners/index.html', {'trucks': trucks})
+        tags = Tag.objects.all()
+        context = {
+            'trucks': trucks,
+            'tags': tags,
+        }
+        return render(request, 'owners/index.html', context)
     elif request.user.type == "Owners":
         return redirect('owners_home', owner_id=request.user.id)
     else:
