@@ -60,7 +60,7 @@ def results_show(request, truck_id):
     truck = Truck.objects.get(id=truck_id)
     reviews = Review.objects.all().filter(truck=truck)
     user = request.user
-
+    hours = Hours.objects.get(truck_id=truck_id)
     if user.id != None:
         favourite = Favourite.objects.all().filter(user=user, truck=truck)
         person_review = Review.objects.all().filter(user=user, truck=truck)
@@ -71,7 +71,8 @@ def results_show(request, truck_id):
         'truck': truck,
         'reviews': reviews,
         'favourite': favourite,
-        'person_review': person_review
+        'person_review': person_review,
+        'hours': hours,
     }
     return render(request, 'results/show.html', context)
 
@@ -398,9 +399,11 @@ def favourites(request, eater_id):
     if request.user.id == eater_id:
         eater = User.objects.get(id=eater_id)
         favourites = Favourite.objects.all().filter(user=eater)
+        tags = Tag.objects.all()
         context = {
             'eater': eater,
-            'favourites': favourites
+            'favourites': favourites,
+            'tags': tags,
         }
         return render(request, 'users/favourites.html', context)
     elif request.user.type == "Owners":
@@ -439,7 +442,7 @@ def favourites_delete(request, eater_id, favourite_id):
             'eater': eater,
             'favourites': favourites
         }
-        return render(request, 'users/favourites.html', context)
+        return redirect('favourites', eater_id=request.user.id)
     elif request.user.type == "Owners":
         return redirect('owners_home', owner_id=request.user.id)
     elif request.user.type == "Eater":

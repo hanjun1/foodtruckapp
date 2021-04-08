@@ -1,70 +1,245 @@
 {% extends 'base.html'%}
 {% block content %}
 
-<hr>
+<div class="top-footer">
+    <div class="top-description-container">
+        <p class="show-truck-name">{{ truck.name }}</p>
+        <p>
+            {% if truck.overall_rating %}
+            <span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="currentColor"
+                    class="bi bi-star-fill" viewBox="0 0 16 16">
+                    <path
+                        d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
+                </svg></span>
+            <span class="text">
+                <span class="rating">{{ truck.overall_rating|floatformat:1 }} / 5.0</span>
+                - {{ truck.num_reviews }}
+                {% if truck.num_reviews == 1 %}
+                review
+                {% else %}
+                reviews
+                {% endif %}
+            </span>
+        </p>
+        {% else %}
+        <p class="rating">No ratings yet...</p>
+        {% endif %}
+    </div>
+    <div class="show-truck-img-container">
+        <img class="show-image" src="{{truck.url}}">
+    </div>
+    <p class="show-truck-description">{{ truck.description }}</p>
+</div>
 
-<p>Truck ID: {{ truck.id }}</p>
-<p>Truck Name: {{ truck.name }}</p>
-{% if truck.overall_rating %}
-<p>Truck Rating: {{ truck.overall_rating|floatformat:1 }} / 5.0</p>
-{% else %}
-<p>Truck Rating: No user ratings for this truck yet</p>
-{% endif %}
-<img src="{{truck.url}}">
-<p>Truck Location: {{ truck.location }}</p>
-<p>Truck Description: {{ truck.description }}</p>
-<hr>
+<div class="show-details-container">
+    <button class="btn btn-primary show-hours">SHOW HOURS</button>
+    <button class="btn btn-primary show-menu">SHOW MENU</button>
+</div>
 
-{% if user.is_authenticated and favourite %}
-<p>Already in your favourites</p>
-{% elif user.is_authenticated %}
-<form action="{% url 'favourites_create' user.id %}" method="POST">
-    {% csrf_token %}
-    <input type="hidden" name="truck_id" value="{{ truck.id }}">
-    <button>Add to Favourites</button>
-</form>
-{% else %}
-<p>Log in to add to favourites</p>
-{% endif %}
+<div class="show-favourites-container">
+    {% if user.is_authenticated and favourite %}
+    <p>Already added to favourites</p>
+    {% elif user.is_authenticated %}
+    <form action="{% url 'favourites_create' user.id %}" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="truck_id" value="{{ truck.id }}">
+        <button class="btn btn-primary">
+            ADD TO FAVOURITES
+        </button>
+    </form>
+    {% else %}
+    <p>Log in to add to favourites</p>
+    {% endif %}
+</div>
 
-<hr>
-<h1>Reviews</h1>
-{% if user.is_authenticated and user.type == 'Eater'%}
-<form action="{% url 'create_review' truck.id %}" method="post">
-    {% csrf_token %}
-    <select name="rating" required>
-        <option value="" disabled selected>Select a rating</option>
-        <option value="5">5</option>
-        <option value="4">4</option>
-        <option value="3">3</option>
-        <option value="2">2</option>
-        <option value="1">1</option>
-    </select> <br>
-    <textarea name="content" cols="30" rows="10" placeholder="Write comment here..."></textarea>
-    <input type="hidden" name="user" value="{{ user }}"> <br>
-    <button>Submit</button>
-</form>
-<hr>
-{% elif person_review %}
-<p>You have already submitted a review</p>
-{% else %}
-<p>Log in to add a review</p>
-{% endif %}
-{% if reviews %}
-{% for review in reviews %}
-<li>User: {{ review.user }}</li>
-<li>Date: {{ review.date }}</li>
-<li>Rating: {{ review.rating }}</li>
-{% if review.content != "" %}
-<li>Comment: {{ review.content }}</li>
-{% endif %}
-{% if user.id == review.user.id %}
-<li><a href="{% url 'delete_review' truck.id review.id %}">Delete</a></li>
-{% endif %}
-<hr>
-{% endfor %}
-{% else %}
-<p>No comments yet</p>
-{% endif %}
+<div id="modal-hours" class="modal">
+    <div class="modal-content">
+        <span class="close close-hours">&times;</span>
+        <table class="table table-responsive">
+            <thead>
+                <tr>
+                    <th class="table-right">Day</th>
+                    <th>Open</th>
+                    <th>Close</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="table-right">Monday</td>
+                    {% if hours.monday_open %}
+                    <td>{{ hours.monday_open }}</td>
+                    <td>{{ hours.monday_close }}</td>
+                    {% else %}
+                    <td class="merged" colspan="2">Closed</td>
+                    {% endif %}
+                </tr>
+                <tr>
+                    <td class="table-right">Tuesday</td>
+                    {% if hours.tuesday_open %}
+                    <td>{{ hours.tuesday_open }}</td>
+                    <td>{{ hours.tuesday_close }}</td>
+                    {% else %}
+                    <td class="merged" colspan="2">Closed</td>
+                    {% endif %}
+                </tr>
+                <tr>
+                    <td class="table-right">Wednesday</td>
+                    {% if hours.wednesday_open %}
+                    <td>{{ hours.wednesday_open }}</td>
+                    <td>{{ hours.wednesday_close }}</td>
+                    {% else %}
+                    <td class="merged" colspan="2">Closed</td>
+                    {% endif %}
+                </tr>
+                <tr>
+                    <td class="table-right">Thursday</td>
+                    {% if hours.thursday_open %}
+                    <td>{{ hours.thursday_open }}</td>
+                    <td>{{ hours.thursday_close }}</td>
+                    {% else %}
+                    <td class="merged" colspan="2">Closed</td>
+                    {% endif %}
+                </tr>
+                <tr>
+                    <td class="table-right">Friday</td>
+                    {% if hours.friday_open %}
+                    <td>{{ hours.friday_open }}</td>
+                    <td>{{ hours.friday_close }}</td>
+                    {% else %}
+                    <td class="merged" colspan="2">Closed</td>
+                    {% endif %}
+                </tr>
+                <tr>
+                    <td class="table-right">Saturday</td>
+                    {% if hours.saturday_open %}
+                    <td>{{ hours.saturday_open }}</td>
+                    <td>{{ hours.saturday_close }}</td>
+                    {% else %}
+                    <td class="merged" colspan="2">Closed</td>
+                    {% endif %}
+                </tr>
+                <tr>
+                    <td class="table-right">Sunday</td>
+                    {% if hours.sunday_open %}
+                    <td>{{ hours.sunday_open }}</td>
+                    <td>{{ hours.sunday_close }}</td>
+                    {% else %}
+                    <td class="merged" colspan="2">Closed</td>
+                    {% endif %}
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="show-location-container">
+    <div id="show-map"></div>
+    <p class="show-truck-location">{{ truck.location }}</p>
+</div>
+
+<div class="show-review-container">
+    <p>Write a Review...</p>
+    {% if user.is_authenticated and user.type == 'Eater'%}
+    <form action="{% url 'create_review' truck.id %}" method="post">
+        {% csrf_token %}
+        <select name="rating" class="form-select" required>
+            <option value="" disabled selected>Select a rating</option>
+            <option value="5">5</option>
+            <option value="4">4</option>
+            <option value="3">3</option>
+            <option value="2">2</option>
+            <option value="1">1</option>
+        </select>
+        <textarea class="form-control" name="content" cols="30" rows="10"
+            placeholder="Write comment here..."></textarea>
+        <input type="hidden" name="user" value="{{ user }}">
+        <button class="btn btn-primary">Submit</button>
+    </form>
+    {% elif person_review %}
+    <p>You have already submitted a review</p>
+    {% else %}
+    <p>Log in to add a review</p>
+    {% endif %}
+</div>
+
+<div class="show-user-review-container">
+    {% if reviews %}
+    {% for review in reviews %}
+    <div class="individual-user-review">
+        <div class="individual-user-review-header">
+            <p class="show-username">{{ review.user }}</p>
+            <p class="show-stars">
+                <span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="currentColor"
+                        class="bi bi-star-fill" viewBox="0 0 16 16">
+                        <path
+                            d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
+                    </svg></span> {{ review.rating }} / 5 - <span>{{ review.date }}</span>
+            </p>
+        </div>
+        {% if review.content != "" %}
+        <p class="show-comment">{{ review.content }}</p>
+        {% endif %}
+        {% if user.id == review.user.id %}
+        <a class="remove-comment" href="{% url 'delete_review' truck.id review.id %}">Delete</a>
+        {% endif %}
+    </div>
+    {% endfor %}
+    {% else %}
+    <p class="no-comments">There are no comments yet</p>
+    {% endif %}
+</div>
+
+
+<script
+    src="https://maps.googleapis.com/maps/api/js?libraries=places&libraries=&v=weekly&key=AIzaSyDtN4w76X1h9sk9jNP8SvP4jF4YIuLv2jA"></script>
+
+<script>
+
+    let hoursModal = document.getElementById('modal-hours');
+    let showHoursBtn = document.querySelector('.show-hours');
+    let spanClose = document.querySelector('.close-hours');
+
+    showHoursBtn.onclick = function () {
+        hoursModal.style.display = "block";
+    }
+
+    spanClose.onclick = function () {
+        hoursModal.style.display = "none";
+    }
+
+    window.onclick = function (e) {
+        if (e.target == hoursModal) {
+            hoursModal.style.display = "none";
+        }
+    }
+
+    function initMap() {
+        const geocoder = new google.maps.Geocoder();
+        const toronto = { lat: 43.651070, lng: -79.347015 };
+        const map = new google.maps.Map(document.getElementById("show-map"), {
+            zoom: 11,
+            center: toronto,
+        })
+        let location = document.querySelector('.show-truck-location');
+        geocodeAddress(geocoder, map, location);
+    }
+
+    function geocodeAddress(geocoder, resultsMap, location) {
+        geocoder.geocode({ 'address': location.innerHTML }, function (results, status) {
+            if (status == 'OK') {
+                let marker = new google.maps.Marker({
+                    map: resultsMap,
+                    position: results[0].geometry.location,
+                });
+                resultsMap.panTo(results[0].geometry.location);
+            } else {
+                alert('Geocode was not successful for the following reason: ' + status);
+            }
+        });
+    }
+
+    initMap()
+</script>
+
 
 {% endblock %}
