@@ -1,27 +1,89 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="sub-index-main">
-    <div class="index-main">
-        <p>Find food trucks in Toronto!</p>
-        <form action="{% url 'results' %}" method="GET" class="index-form">
-            <div class="input-group">
-                <input name="search" class="form-control border-end-0 border" type="text" id="example-search-input"
-                    placeholder="e.g. taco, burgers, italian">
-                <div class="input-group-append">
-                    <button class="btn btn-primary">
-                        <span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                class="bi bi-search" viewBox="0 0 16 16">
-                                <path
-                                    d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
-                            </svg></span>
-                    </button>
+
+<div class="main-page-container">
+    <div class="background-image-container">
+
+    </div>
+    <div class="sub-index-main">
+        <div class="slogan-container">
+            <p>Looking for the best street food in Toronto?</p>
+            <p>Find your favourite food trucks with us!</p>
+        </div>
+    </div>
+    <div class="index-main-container">
+        <div class="index-main">
+            <form action="{% url 'results' %}" method="GET" class="index-form">
+                <div class="input-group">
+                    <input name="search" class="form-control border-end-0 border" type="text" id="example-search-input"
+                        placeholder="e.g. taco, burgers, italian">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary">
+                            <span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                    class="bi bi-search" viewBox="0 0 16 16">
+                                    <path
+                                        d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                                </svg></span>
+                        </button>
+                    </div>
+                </div>
+            </form>
+            <p class="or-index">- or -</p>
+            <form action="{% url 'show_all' %}" method="GET" class="index-form-showall">
+                <button class="btn btn-primary">Show All Trucks</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="truck-gallery-container">
+    <div class="truck-gallery-title">
+        <p>Our Favourites</p>
+    </div>
+    <div class="truck-gallery-subcontainer">
+        {% for truck in trucks %}
+        <a href="{% url 'results_show' truck.id %}">
+            <div class="truck-single-container">
+                <img src="{{ truck.url }}">
+                <p class="gallery-truck-title">{{ truck.name }}</p>
+                <p>
+                    <span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="17" height="17"
+                            fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16">
+                            <path
+                                d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
+                        </svg>
+                    </span>
+                    <span class="text">
+                        <span class="rating">{{ truck.overall_rating|floatformat:1 }} / 5.0</span>
+                    </span>
+                </p>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="random-reviews-container">
+    <div class="random-reviews-title">
+        <p>Discover New Trucks!</p>
+    </div>
+    <div class="random-trucks-container">
+        {% for truck in random_trucks %}
+        <div class="random-truck-container">
+            <div class="random-truck-image-container">
+                <img src="{{ truck.0.url }}">
+            </div>
+            <div class="random-truck-description-container">
+                <div class="random-truck-description">
+                    <p>{{ truck.0.description }}</p>
+                </div>
+                <div class="random-truck-random-review">
+                    <p>"{{ truck.1.content }}"</p>
                 </div>
             </div>
-        </form>
-        <p class="or-index">or</p>
-        <form action="{% url 'show_all' %}" method="GET" class="index-form-showall">
-            <button class="btn btn-primary">Show All Trucks</button>
-        </form>
+        </div>
+        {% endfor %}
     </div>
+
 </div>
 {% endblock %}

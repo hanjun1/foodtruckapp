@@ -14,6 +14,10 @@ from django.contrib.auth.decorators import login_required
 from .decorators import unauthenticated_user, allowed_users
 import uuid
 import boto3
+import os
+
+AWS_ACCESS_ID = os.environ.get('AWS_ACCESS_ID')
+AWS_ACCESS_KEY = os.environ.get('AWS_ACCESS_KEY')
 
 S3_BASE_URL = 'https://s3.us-east-2.amazonaws.com/'
 BUCKET = 'catcollectormdpn'
@@ -22,12 +26,37 @@ User = get_user_model()
 
 
 def home(request):
-    return render(request, 'index.html')
+    trucks = Truck.objects.all().exclude(overall_rating__isnull=True)
+    trucks = trucks.order_by('-overall_rating')[:5]
+    truck_ids = []
+    for truck in trucks:
+        truck_ids.append(truck.id)
+    random_trucks = Truck.objects.all().filter(
+        overall_rating__gte=4).exclude(pk__in=truck_ids).order_by('?')
+    if len(random_trucks) >= 3:
+        random_trucks = random_trucks[:3]
+    random_trucks_description = []
+    for truck in random_trucks:
+        review = Review.objects.all().filter(
+            truck_id=truck.id, rating__gte=4).order_by('?')[0]
+        random_trucks_description.append([truck, review])
+    print(random_trucks_description)
+    context = {
+        'trucks': trucks,
+        'random_trucks': random_trucks_description,
+    }
+    return render(request, 'index.html', context)
 
 
 def show_all(request):
     trucks = Truck.objects.all()
     tags = Tag.objects.all()
+
+    trucks = trucks.order_by('name')
+
+    if len(trucks) == 0:
+        trucks = None
+
     context = {
         'trucks': trucks,
         'tags': tags
@@ -48,6 +77,11 @@ def results(request):
         qs = qs.filter(Q(name__icontains=name_contains_query) | Q(
             description__icontains=name_contains_query)).distinct()
 
+    qs = qs.order_by('name')
+
+    if len(qs) == 0:
+        qs = None
+
     context = {
         'name_contains_query': name_contains_query,
         'queryset': qs,
@@ -61,6 +95,7 @@ def results_show(request, truck_id):
     reviews = Review.objects.all().filter(truck=truck)
     user = request.user
     hours = Hours.objects.get(truck_id=truck_id)
+    menu = Menu.objects.all().filter(truck_id=truck_id)
     if user.id != None:
         favourite = Favourite.objects.all().filter(user=user, truck=truck)
         person_review = Review.objects.all().filter(user=user, truck=truck)
@@ -73,6 +108,7 @@ def results_show(request, truck_id):
         'favourite': favourite,
         'person_review': person_review,
         'hours': hours,
+        'menu': menu,
     }
     return render(request, 'results/show.html', context)
 
@@ -104,7 +140,11 @@ def delete_review(request, truck_id, review_id):
     review.delete()
     truck = Truck.objects.get(id=truck_id)
     all_reviews = Review.objects.all().filter(truck=truck)
-    if all_reviews:
+    if len(all_reviews) == 0:
+        truck.overall_rating = None
+        truck.num_reviews = 0
+        truck.save()
+    elif all_reviews:
         overall_rating = 0
         count = 0
         for review in all_reviews:
@@ -154,7 +194,11 @@ def owners_create(request, owner_id):
             owner = User.objects.get(id=owner_id)
             photo_file = request.FILES.get('photo-file', None)
             if photo_file:
-                s3 = boto3.client('s3')
+                s3 = boto3.client(
+                    's3',
+                    aws_access_key_id=AWS_ACCESS_ID,
+                    aws_secret_access_key=AWS_ACCESS_KEY,
+                )
                 key = uuid.uuid4().hex[:6] + \
                     photo_file.name[photo_file.name.rfind('.'):]
                 try:
@@ -163,7 +207,7 @@ def owners_create(request, owner_id):
                 except:
                     print('An error occurred uploading file to S3')
             else:
-                url = "https://s3.us-east-2.amazonaws.com/catcollectormdpn/97e068.png"
+                url = "https://catcollectormdpn.s3.us-east-2.amazonaws.com/758968.jpg"
             truck = Truck.objects.create(name=request.POST.get('name'), description=request.POST.get(
                 'description'), location=request.POST.get('location'), url=url, num_reviews=0, user=owner)
             monday_open = request.POST.get('monday_open') if request.POST.get(
@@ -290,7 +334,11 @@ def owners_update(request, owner_id, truck_id):
         truck.location = request.POST.get('location')
         photo_file = request.FILES.get('photo-file', None)
         if photo_file:
-            s3 = boto3.client('s3')
+            s3 = boto3.client(
+                's3',
+                aws_access_key_id=AWS_ACCESS_ID,
+                aws_secret_access_key=AWS_ACCESS_KEY,
+            )
             key = uuid.uuid4().hex[:6] + \
                 photo_file.name[photo_file.name.rfind('.'):]
             try:
@@ -300,7 +348,7 @@ def owners_update(request, owner_id, truck_id):
             except:
                 print('An error occurred uploading file to S3')
         else:
-            url = "https://s3.us-east-2.amazonaws.com/catcollectormdpn/97e068.png"
+            url = "https://catcollectormdpn.s3.us-east-2.amazonaws.com/758968.jpg"
         truck.url = url
         truck.save()
         monday_open = request.POST.get('monday_open') if request.POST.get(
