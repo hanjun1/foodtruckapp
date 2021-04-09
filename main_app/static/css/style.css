@@ -156,11 +156,6 @@ body {
   margin-right: auto;
 }
 
-.sub-index-main {
-  /* margin-top: 30vh; */
-  /* height: 100vh; */
-}
-
 .index-main-container {
   margin: 5vh 20px;
 }
@@ -389,6 +384,7 @@ button.active {
 #map {
   height: 500px;
   width: 100%;
+  border-radius: 10px;
 }
 
 .pin {
@@ -441,12 +437,16 @@ button.active {
 .show-image {
   max-width: 400px;
   width: 100%;
+  border-radius: 10px;
 }
 
 .show-truck-description {
   margin-top: 1rem;
   text-align: justify;
   font-size: 15px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .show-location-container {
@@ -456,9 +456,8 @@ button.active {
 }
 
 .show-details-container {
-  margin: 1rem 20px;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid #e6e6e6;
+  margin-left: 20px;
+  margin-right: 20px;
   display: flex;
   justify-content: space-around;
 }
@@ -467,7 +466,6 @@ button.active {
   background: #bcd5ef;
   color: #000;
   border: none;
-  width: 48%;
   max-width: 200px;
 }
 
@@ -475,6 +473,12 @@ button.active {
   width: 100%;
   height: 200px;
   margin-bottom: 1rem;
+  border-radius: 10px;
+}
+
+.img-description-container {
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e6e6e6;
 }
 
 .show-truck-location {
@@ -537,6 +541,7 @@ table {
 }
 
 .show-favourites-container p {
+  margin-top: 1rem;
   margin-bottom: 0;
 }
 
@@ -554,9 +559,16 @@ table {
   border-bottom: 1px solid #e6e6e6;
 }
 
+.show-review-container form {
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .show-review-container p {
   font-size: 1.5rem;
   margin-bottom: 10px;
+  margin-right: auto;
+  margin-left: auto;
 }
 
 .show-review-container textarea {
@@ -663,6 +675,12 @@ table {
   margin-top: 20%;
 }
 
+.image-container-owner {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
 .edit-img {
   width: 300px;
 }
@@ -693,6 +711,16 @@ table {
   margin-bottom: 1rem;
 }
 
+.main-login-container {
+  margin-top: 30vh;
+}
+
+.login-form-container {
+  margin: 20px auto;
+  padding: 20px;
+  max-width: 430px;
+}
+
 @media only screen and (min-width: 768px) {
   .main-page-container {
     margin-top: 23vh;
@@ -714,5 +742,12 @@ table {
 
   .navbar-desktop {
     display: flex;
+  }
+
+  .img-description-container {
+    display: flex;
+  }
+  .show-truck-description {
+    padding: 20px;
   }
 }
