@@ -456,10 +456,8 @@ button.active {
 }
 
 .show-details-container {
-  margin-left: 20px;
-  margin-right: 20px;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-evenly;
 }
 
 .show-details-container button {
@@ -511,10 +509,11 @@ table {
 
 .modal-content {
   background-color: #fefefe;
-  margin: 45% auto;
+  margin: 20% auto;
   padding: 20px;
   border: 1px solid #888;
   width: 90%;
+  max-width: 500px;
 }
 
 .close {
@@ -535,13 +534,13 @@ table {
 .show-favourites-container {
   margin-left: 20px;
   margin-right: 20px;
+  padding-top: 1rem;
   padding-bottom: 1rem;
   border-bottom: 1px solid #e6e6e6;
   text-align: center;
 }
 
 .show-favourites-container p {
-  margin-top: 1rem;
   margin-bottom: 0;
 }
 
@@ -550,6 +549,7 @@ table {
   color: #000;
   border: none;
   width: 100%;
+  max-width: 300px;
 }
 
 .show-review-container {
