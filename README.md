@@ -17,7 +17,7 @@ strEAT Finder brings food lovers and local food trucks together. Search for food
 * Django
 * Amazon S3
 * Google Maps API
-* Etc.
+* Bootstrap
 
 ## Future Enhancements
 * Search filters
