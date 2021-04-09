@@ -10,12 +10,14 @@ boto3==1.17.42
 botocore==1.20.42
 certifi==2020.6.20
 chardet==3.0.4
+crispy-bootstrap5==0.3.1
 cycler==0.10.0
 decorator==4.4.2
 defusedxml==0.6.0
 distlib==0.3.1
 dj-database-url==0.5.0
 Django==3.2
+django-crispy-forms==1.11.2
 django-environ==0.4.5
 django-heroku==0.3.1
 entrypoints==0.3
