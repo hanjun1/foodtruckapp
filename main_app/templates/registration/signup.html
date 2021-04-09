@@ -1,53 +1,32 @@
 {% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+
 {% block content %}
 
-<h1>Sign Up</h1>
-
-{% if error_message %}<p class="red-text">{{ error_message }}</p>{% endif %}
-
-<form method="post" action="{% url 'signup' %}">
-  {% csrf_token %}
-  <div class="form-group">
-    <label>Username</label>
-    <input type="text" class="form-control" name="username">
-  </div>
-  <br>
-  <div class="form-group">
-    <label>Password</label>
-    <input type="password" class="form-control bg-white" name="password1">
-  </div>
-  <br>
-  <div class="form-group">
-    <label>Confirm Password</label>
-    <input type="password" class="form-control bg-white" name="password2">
-  </div>
-  <br>
-  <div class="form-group">
-    <label>User Type</label>
-    <select class="form-control custom-select mr-sm-2 bg-white" name="groups">
-      <option>Eater</option>
-      <option>Owner</option>
-    </select>
-  </div>
-  <br>
-  <div class="row">
-    <div class="col text-center">
-      <input class="btn" style="width: 100%; background-color: #BCD5E3;" type="submit" value="Register"><br>
-      <input type="hidden" name="next" value="{{ next }}">
+<div class="signup container">
+  <form method="post" action="{% url 'signup' %}">
+    {% csrf_token %}
+    <div class="row">
+      <div class="col text-center">
+        {% for field in form %}
+              <div class="form-group">
+                  <div class="form-group">
+                    {{ field|as_crispy_field }}
+                  </div>
+              </div>
+        {% endfor %}
+      </div>
     </div>
-  </div>
-</form>
+    <div class="row">
+      <div class="col text-center">
+        <input class="btn" style="width: 100%; background-color: #BCD5E3;" type="submit" value="Register"><br>
+        <input type="hidden" name="next" value="{{ next }}">
+      </div>
+    </div>
+    {{form.errors}}
+  </form>
+</div>
 
-  <!-- Username: <input name="username">
-  Password: <input name="password" type="password">
-  Confirm Password: <input name="password" type="password"> -->
-  <!-- {{ form.as_p }} -->
-  <!-- Username: {{form.username}}
-  Password: {{form.password1}}
-  Confirm Password: {{form.password2}}
-  Type: {{form.groups}} -->
-  <!-- <input type="submit" value="signup">
-  {{form.errors}}
-</form> -->
 
 {% endblock %}
