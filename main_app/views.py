@@ -158,7 +158,7 @@ def owners_create(request, owner_id):
                 except:
                     print('An error occurred uploading file to S3')
             else:
-                url = "https://s3.us-east-2.amazonaws.com/catcollectormdpn/97e068.png"
+                url = "https://catcollectormdpn.s3.us-east-2.amazonaws.com/758968.jpg"
             truck = Truck.objects.create(name=request.POST.get('name'), description=request.POST.get(
                 'description'), location=request.POST.get('location'), url=url, num_reviews=0, user=owner)
             monday_open = request.POST.get('monday_open') if request.POST.get(
@@ -295,7 +295,7 @@ def owners_update(request, owner_id, truck_id):
             except:
                 print('An error occurred uploading file to S3')
         else:
-            url = "https://s3.us-east-2.amazonaws.com/catcollectormdpn/97e068.png"
+            url = "https://catcollectormdpn.s3.us-east-2.amazonaws.com/758968.jpg"
         truck.url = url
         truck.save()
         monday_open = request.POST.get('monday_open') if request.POST.get(

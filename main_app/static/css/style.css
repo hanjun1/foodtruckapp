@@ -498,3 +498,15 @@ table {
 .signup {
   width: 80%;
 }
+
+@media (max-width: 600px) {
+  .login-container { margin-top: 40%; }
+}
+
+.login-container {
+  margin-top: 20%;
+}
+
+.edit-img {
+  width: 300px;
+}

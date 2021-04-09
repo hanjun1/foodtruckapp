@@ -14,7 +14,7 @@
         <label>CURRENT LOCATION</label>
         <input id="autocomplete" type="text" name="location" class="form-control"  value="{{ truck.location}}" required>
     </div>
-    <img src="{{truck.url}}">
+    <img class="edit-img" src="{{truck.url}}">
     <div class="form-group">
         <label>ADD/EDIT PHOTO</label>
         <input type="file" name="photo-file" class="form-control">
@@ -23,9 +23,9 @@
         <label>DESCRIPTION</label>
         <textarea class="form-control" name="description" rows="6" placeholder="Enter truck description" required>{{ truck.description }}</textarea>
     </div>
-    <div class="form-group">
+    <div class="form-group table-responsive">
         <label>OPERATING HOURS</label>    
-    <table class="table">
+    <table class="table hours-table">
         <tr>
             <th>Day</th>
             <th>Open Hours</th>
@@ -68,30 +68,32 @@
         </tr>
     </table>
     </div>
-    <div class="form-row">
+    <div class="container">
+    <div class="row">
         <label>TAGS</label>
-        <div class="form-group col-md-6">
+        <div class="form-group col">
             <input type="text" name="content" class="form-control" placeholder="Enter a tag" value="{{ tags.0 }}">
         </div>
-        <div class="form-group col-md-6">
+        <div class="form-group col">
             <input type="text" name="content" class="form-control" placeholder="Enter a tag" value="{{ tags.1 }}">
         </div>
-    <div class="form-row">
-        <div class="form-group col-md-6">
+    </div>
+    <div class="row">
+        <div class="form-group col">
             <input type="text" name="content" class="form-control" placeholder="Enter a tag" value="{{ tags.2 }}">
         </div>
-        <div class="form-group col-md-6">
+        <div class="form-group col">
             <input type="text" name="content" class="form-control" placeholder="Enter a tag" value="{{ tags.3 }}">
         </div>
     </div>
-    <div class="form-row">
-        <div class="form-group col-md-6">
+    <div class="row">
+        <div class="form-group col">
             <input type="text" name="content" class="form-control" placeholder="Enter a tag" value="{{ tags.4 }}">
         </div>
-        <div class="form-group col-md-6">
+        <div class="form-group col">
             <input type="text" name="content" class="form-control" placeholder="Enter a tag" value="{{ tags.5 }}">
         </div>
-    </div>
+    </div></div>
     <div class="form-group  validate-me">
         <label>MENU</label>
     <table class="table menu">
@@ -156,7 +158,7 @@
         for (i = 0; i < openHour.length; i++) {
             if (openHour[i].value != "" && closeHour[i].value == "") {
                     closeHour[i].required = true
-                    alert('enter closing time')
+                    closeHour[i].style.border = '1px solid red'
                     return false;
             }
         }
