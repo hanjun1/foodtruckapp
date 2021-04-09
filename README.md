@@ -6,7 +6,7 @@ strEAT Finder brings food lovers and local food trucks together. Search for food
 ![Home Page](https://i.imgur.com/kHibiIo.png)
 ![Search Page](https://i.imgur.com/bAgZvEC.png)
 ![Map Page](https://i.imgur.com/fpXubXd.png)
-![Details Page](https://i.imgur.com/KmpDbi3.png)
+![Details Page](https://i.imgur.com/tAJzzWj.png)
 
 
 ## Getting Started
