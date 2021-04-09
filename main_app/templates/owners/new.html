@@ -3,139 +3,149 @@
 
 <div class="container">
     <h1>NEW TRUCK</h1>
-<form class="needs-validation" novalidate name="new" action="{% url 'owners_create' user.id %}" onsubmit="return validateForm()" enctype="multipart/form-data" method="POST">
-    {% csrf_token %}
-    <div class="form-group validate-me">
-        <label>NAME</label>
-        <input type="text" name="name" class="form-control" placeholder="Enter truck name" required>
-        <div class="invalid-feedback">
-            Please enter the name of your truck.
-          </div>
-    </div>
-    <div class="form-group validate-me">
-        <label>CURRENT LOCATION</label>
-        <input id="autocomplete" type="text" name="location" class="form-control" required>
-        <div class="invalid-feedback">
-            Please enter your current location.
-          </div>
-    </div>
-    <div class="form-group">
-        <label>ADD PHOTO</label>
-        <input type="file" name="photo-file" class="form-control">
-    </div>
-    <div class="form-group validate-me">
-        <label>DESCRIPTION</label>
-        <textarea class="form-control" name="description" rows="6" placeholder="Enter truck description" required></textarea>
-        <div class="invalid-feedback">
-            Please enter the description of your truck.
-          </div>
-    </div>
-    <div class="form-group table-responsive">
-        <label>OPERATING HOURS</label>    
-    <table class="table hours-table">
-        <tr>
-            <th>Day</th>
-            <th>Open Hours</th>
-            <th>Close Hours</th>
-        </tr>
-        <tr>
-            <td>Monday</td>
-            <td><input type="time" class="open-hour" name="monday_open"></td>
-            <td><input type="time" class="close-hour validate-me" name="monday_close"></td>
-        </tr>
-        <tr>
-            <td>Tuesday</td>
-            <td><input type="time" class="open-hour" name="tuesday_open"></td>
-            <td><input type="time" class="close-hour validate-me" name="tuesday_close"></td>
-        </tr>
-        <tr>
-            <td>Wednesday</td>
-            <td><input type="time" class="open-hour" name="wednesday_open"></td>
-            <td><input type="time" class="close-hour validate-me" name="wednesday_close"></td>
-        </tr>
-        <tr>
-            <td>Thursday</td>
-            <td><input type="time" class="open-hour" name="thursday_open"></td>
-            <td><input type="time" class="close-hour validate-me" name="thursday_close"></td>
-        </tr>
-        <tr>
-            <td>Friday</td>
-            <td><input type="time" class="open-hour" name="friday_open"></td>
-            <td><input type="time" class="close-hour validate-me" name="friday_close"></td>
-        </tr>
-        <tr>
-            <td>Saturday</td>
-            <td><input type="time" class="open-hour" name="saturday_open"></td>
-            <td><input type="time" class="close-hour validate-me" name="saturday_close"></td>
-        </tr>
-        <tr>
-            <td>Sunday</td>
-            <td><input type="time" class="open-hour" name="sunday_open"></td>
-            <td><input type="time" class="close-hour validate-me" name="sunday_close"></td>
-        </tr>
-    </table>
-    </div>
-    <div class="container">
-        <div class="row">
-            <label>TAGS</label>
-            <div class="form-group col">
-                <input type="text" name="content" class="form-control" placeholder="Enter a tag">
-            </div>
-            <div class="form-group col">
-                <input type="text" name="content" class="form-control" placeholder="Enter a tag">
+    <form class="needs-validation" novalidate name="new" action="{% url 'owners_create' user.id %}"
+        onsubmit="return validateForm()" enctype="multipart/form-data" method="POST">
+        {% csrf_token %}
+        <div class="form-group validate-me">
+            <label>NAME</label>
+            <input type="text" name="name" class="form-control" placeholder="Enter truck name" required>
+            <div class="invalid-feedback">
+                Please enter the name of your truck.
             </div>
         </div>
-        <div class="row">
-            <div class="form-group col">
-                <input type="text" name="content" class="form-control" placeholder="Enter a tag">
-            </div>
-            <div class="form-group col">
-                <input type="text" name="content" class="form-control" placeholder="Enter a tag">
-            </div>
-        </div>
-        <div class="row">
-            <div class="form-group col">
-                <input type="text" name="content" class="form-control" placeholder="Enter a tag">
-            </div>
-            <div class="form-group col">
-                <input type="text" name="content" class="form-control" placeholder="Enter a tag">
+        <div class="form-group validate-me">
+            <label>CURRENT LOCATION</label>
+            <input id="autocomplete" type="text" name="location" class="form-control" required>
+            <div class="invalid-feedback">
+                Please enter your current location.
             </div>
         </div>
-    </div>
-    <div class="form-group validate-me">
-        <label>MENU</label>
-    <div class="table">
-    <table class="table menu">
-        <tr>
-            <th>Menu Item</th>
-            <th>Description</th>
-            <th>Price</th>
-            <th></th>
-        </tr>
-        <tr>
-            <td><input type="text" class="form-control food-name" name="food_name"></td>
-            <td><input type="text" class="form-control food-description" name="food_description"></td>
-            <td><input type="number" class="form-control food-price" min="0.00" max="10000.00" step="0.01" name="food_price" placeholder="0.00"></td>
-            <td><input type="submit" class="btn delete"style="width: 100%; background-color: #BCD5E3;" value="-"></td>
-        </tr>
-        <tr>
-            <td><input type="text" class="form-control food-name" name="food_name"></td>
-            <td><input type="text" class="form-control food-description" name="food_description"></td>
-            <td><input type="number" class="form-control food-price" min="0.00" max="10000.00" step="0.01" name="food_price" placeholder="0.00"></td>
-            <td><input type="submit" class="btn delete"style="width: 100%; background-color: #BCD5E3;" value="-"></td>
-        </tr>
-        <tr>
-            <td><input type="text" class="form-control food-name" name="food_name"></td>
-            <td><input type="text" class="form-control food-description" name="food_description"></td>
-            <td><input type="number" class="form-control food-price" min="0.00" max="10000.00" step="0.01" name="food_price" placeholder="0.00"></td>
-            <td><input type="submit" class="btn delete"style="width: 100%; background-color: #BCD5E3;" value="-"></td>
-        </tr>
-    </table>
-    </div>
-    </div>
-    <button type="button" class="btn new-menu" style="width: 100%; margin-bottom: 20px; background-color: #BCD5E3;">Add More Items</button>
-    <button class="btn" style="width: 100%; margin-bottom: 20px; background-color: #BCD5E3;">Create New Listing</button>
-</form>
+        <div class="form-group">
+            <label>ADD PHOTO</label>
+            <input type="file" name="photo-file" class="form-control">
+        </div>
+        <div class="form-group validate-me">
+            <label>DESCRIPTION</label>
+            <textarea class="form-control" name="description" rows="6" placeholder="Enter truck description"
+                required></textarea>
+            <div class="invalid-feedback">
+                Please enter the description of your truck.
+            </div>
+        </div>
+        <div class="form-group table-responsive">
+            <label>OPERATING HOURS</label>
+            <table class="table hours-table">
+                <tr>
+                    <th>Day</th>
+                    <th>Open Hours</th>
+                    <th>Close Hours</th>
+                </tr>
+                <tr>
+                    <td>Monday</td>
+                    <td><input type="time" class="open-hour" name="monday_open"></td>
+                    <td><input type="time" class="close-hour validate-me" name="monday_close"></td>
+                </tr>
+                <tr>
+                    <td>Tuesday</td>
+                    <td><input type="time" class="open-hour" name="tuesday_open"></td>
+                    <td><input type="time" class="close-hour validate-me" name="tuesday_close"></td>
+                </tr>
+                <tr>
+                    <td>Wednesday</td>
+                    <td><input type="time" class="open-hour" name="wednesday_open"></td>
+                    <td><input type="time" class="close-hour validate-me" name="wednesday_close"></td>
+                </tr>
+                <tr>
+                    <td>Thursday</td>
+                    <td><input type="time" class="open-hour" name="thursday_open"></td>
+                    <td><input type="time" class="close-hour validate-me" name="thursday_close"></td>
+                </tr>
+                <tr>
+                    <td>Friday</td>
+                    <td><input type="time" class="open-hour" name="friday_open"></td>
+                    <td><input type="time" class="close-hour validate-me" name="friday_close"></td>
+                </tr>
+                <tr>
+                    <td>Saturday</td>
+                    <td><input type="time" class="open-hour" name="saturday_open"></td>
+                    <td><input type="time" class="close-hour validate-me" name="saturday_close"></td>
+                </tr>
+                <tr>
+                    <td>Sunday</td>
+                    <td><input type="time" class="open-hour" name="sunday_open"></td>
+                    <td><input type="time" class="close-hour validate-me" name="sunday_close"></td>
+                </tr>
+            </table>
+        </div>
+        <div class="container">
+            <div class="row">
+                <label>TAGS</label>
+                <div class="form-group col">
+                    <input type="text" name="content" class="form-control" placeholder="Enter a tag">
+                </div>
+                <div class="form-group col">
+                    <input type="text" name="content" class="form-control" placeholder="Enter a tag">
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col">
+                    <input type="text" name="content" class="form-control" placeholder="Enter a tag">
+                </div>
+                <div class="form-group col">
+                    <input type="text" name="content" class="form-control" placeholder="Enter a tag">
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col">
+                    <input type="text" name="content" class="form-control" placeholder="Enter a tag">
+                </div>
+                <div class="form-group col">
+                    <input type="text" name="content" class="form-control" placeholder="Enter a tag">
+                </div>
+            </div>
+        </div>
+        <div class="form-group validate-me">
+            <label>MENU</label>
+            <div class="table">
+                <table class="table menu">
+                    <tr>
+                        <th>Menu Item</th>
+                        <th>Description</th>
+                        <th>Price</th>
+                        <th></th>
+                    </tr>
+                    <tr>
+                        <td><input type="text" class="form-control food-name" name="food_name"></td>
+                        <td><input type="text" class="form-control food-description" name="food_description"></td>
+                        <td><input type="number" class="form-control food-price" min="0.00" max="10000.00" step="0.01"
+                                name="food_price" placeholder="0.00"></td>
+                        <td><input type="submit" class="btn delete" style="width: 100%; background-color: #BCD5E3;"
+                                value="-"></td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" class="form-control food-name" name="food_name"></td>
+                        <td><input type="text" class="form-control food-description" name="food_description"></td>
+                        <td><input type="number" class="form-control food-price" min="0.00" max="10000.00" step="0.01"
+                                name="food_price" placeholder="0.00"></td>
+                        <td><input type="submit" class="btn delete" style="width: 100%; background-color: #BCD5E3;"
+                                value="-"></td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" class="form-control food-name" name="food_name"></td>
+                        <td><input type="text" class="form-control food-description" name="food_description"></td>
+                        <td><input type="number" class="form-control food-price" min="0.00" max="10000.00" step="0.01"
+                                name="food_price" placeholder="0.00"></td>
+                        <td><input type="submit" class="btn delete" style="width: 100%; background-color: #BCD5E3;"
+                                value="-"></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <button type="button" class="btn new-menu"
+            style="width: 100%; margin-bottom: 20px; background-color: #BCD5E3;">Add More Items</button>
+        <button class="btn" style="width: 100%; margin-bottom: 20px; background-color: #BCD5E3;">Create New
+            Listing</button>
+    </form>
 </div>
 
 <script>
@@ -191,23 +201,23 @@
     );
 </script>
 <script>
-    (function() {
-      'use strict';
-      window.addEventListener('load', function() {
-        var forms = document.getElementsByClassName('needs-validation');
-        var validateGroup = document.getElementsByClassName('validate-me');
-        var validation = Array.prototype.filter.call(forms, function (form) {
-                    form.addEventListener('submit', function (event) {
-                        if (form.checkValidity() === false) {
-                            event.preventDefault();
-                            event.stopPropagation();
-                        }
-                        for (var i = 0; i < validateGroup.length; i++) {
-                            validateGroup[i].classList.add('was-validated');
-                        }
-                    }, false);
-                });
-            }, false);
+    (function () {
+        'use strict';
+        window.addEventListener('load', function () {
+            var forms = document.getElementsByClassName('needs-validation');
+            var validateGroup = document.getElementsByClassName('validate-me');
+            var validation = Array.prototype.filter.call(forms, function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    for (var i = 0; i < validateGroup.length; i++) {
+                        validateGroup[i].classList.add('was-validated');
+                    }
+                }, false);
+            });
+        }, false);
     })();
-    </script>
+</script>
 {% endblock %}

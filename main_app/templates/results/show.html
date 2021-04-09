@@ -39,7 +39,7 @@
 <div class="show-favourites-container">
     {% if user.is_authenticated and favourite %}
     <p>Already added to favourites</p>
-    {% elif user.is_authenticated %}
+    {% elif user.is_authenticated and user.type == 'Eater' %}
     <form action="{% url 'favourites_create' user.id %}" method="POST">
         {% csrf_token %}
         <input type="hidden" name="truck_id" value="{{ truck.id }}">
@@ -47,6 +47,8 @@
             ADD TO FAVOURITES
         </button>
     </form>
+    {% elif user.type == 'Owner' %}
+    <p>Log in as a 'Eater' to add to favourites</p>
     {% else %}
     <p>Log in to add to favourites</p>
     {% endif %}
@@ -132,14 +134,40 @@
     </div>
 </div>
 
+<div id="modal-menu" class="modal">
+    <div class="modal-content">
+        <span class="close close-menu">&times;</span>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Menu Item</th>
+                        <th>Menu Description</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in menu %}
+                    <tr>
+                        <td>{{ item.food_name }}</td>
+                        <td>{{ item.food_description }}</td>
+                        <td>${{ item.food_price }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
 <div class="show-location-container">
     <div id="show-map"></div>
     <p class="show-truck-location">{{ truck.location }}</p>
 </div>
 
 <div class="show-review-container">
-    <p>Write a Review...</p>
     {% if user.is_authenticated and user.type == 'Eater'%}
+    <p>Write a Review...</p>
     <form action="{% url 'create_review' truck.id %}" method="post">
         {% csrf_token %}
         <select name="rating" class="form-select" required>
@@ -157,9 +185,14 @@
     </form>
     {% elif person_review %}
     <p>You have already submitted a review</p>
-    {% else %}
-    <p>Log in to add a review</p>
-    {% endif %}
+    {% elif user.type == 'Owner' %}
+    {% if truck.num_reviews <= 1 %} <p id="review-number">{{ truck.num_reviews }} Review</p>
+        {% else %}
+        <p id="review-number">{{ truck.num_reviews }} Reviews</p>
+        {% endif %}
+        {% else %}
+        <p id="review-number">Log in to add a review</p>
+        {% endif %}
 </div>
 
 <div class="show-user-review-container">
@@ -185,7 +218,9 @@
     </div>
     {% endfor %}
     {% else %}
-    <p class="no-comments">There are no comments yet</p>
+    <div class="no-comments-container">
+        <p class="no-comments">There are no comments yet</p>
+    </div>
     {% endif %}
 </div>
 
@@ -196,8 +231,15 @@
 <script>
 
     let hoursModal = document.getElementById('modal-hours');
+    let menuModal = document.getElementById('modal-menu')
     let showHoursBtn = document.querySelector('.show-hours');
+    let showMenuBtn = document.querySelector('.show-menu');
     let spanClose = document.querySelector('.close-hours');
+    let spanMenuClose = document.querySelector('.close-menu');
+
+    showMenuBtn.onclick = function () {
+        menuModal.style.display = 'block';
+    }
 
     showHoursBtn.onclick = function () {
         hoursModal.style.display = "block";
@@ -207,9 +249,15 @@
         hoursModal.style.display = "none";
     }
 
+    spanMenuClose.onclick = function () {
+        menuModal.style.display = "none";
+    }
+
     window.onclick = function (e) {
         if (e.target == hoursModal) {
             hoursModal.style.display = "none";
+        } else if (e.target == menuModal) {
+            menuModal.style.display = "none";
         }
     }
 
