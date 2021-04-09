@@ -728,12 +728,13 @@ table {
 
   .random-truck-container {
     display: flex;
+    margin-bottom: 20px;
   }
 
   .random-truck-image-container img {
     border-top-right-radius: 0;
     border-bottom-left-radius: 10px;
-    max-width: 550px;
+    width: 300px;
   }
 
   .navbar-mobile {
