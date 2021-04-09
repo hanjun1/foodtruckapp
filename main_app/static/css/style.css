@@ -62,6 +62,31 @@ body {
   margin-left: 50px;
 }
 
+.navbar-desktop {
+  display: none;
+}
+
+.navbar-desktop ul {
+  list-style-type: none;
+  margin: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.navbar-desktop li {
+  display: inline;
+  margin: 0 10px;
+}
+
+.navbar-desktop a {
+  text-decoration: none;
+  color: black;
+}
+
+.logo-desktop {
+  margin: 0px 20px;
+}
+
 .openbtn,
 .searchbtn {
   font-size: 20px;
@@ -126,7 +151,7 @@ body {
 
 .main {
   margin-top: 10vh;
-  max-width: 1000px;
+  max-width: 900px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -189,7 +214,7 @@ body {
 
 .truck-single-container img {
   width: calc(100px + 15vw);
-  max-width: 250px;
+  max-width: 180px;
   border-radius: 10px;
 }
 
@@ -204,12 +229,18 @@ body {
 
 .random-truck-image-container img {
   width: 100%;
-  border-radius: 10px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
 }
 
 .random-truck-container {
   background: #bcd5ef;
   border-radius: 10px;
+}
+
+.random-trucks-container a {
+  color: black;
+  text-decoration: none;
 }
 
 .random-truck-description-container p {
@@ -320,6 +351,7 @@ button.active {
 
 .truck-container-image img {
   width: 100%;
+  border-radius: 10px;
 }
 
 .truck-description-container {
@@ -403,6 +435,7 @@ button.active {
   display: flex;
   justify-content: center;
   margin-top: 20px;
+  border-radius: 10px;
 }
 
 .show-image {
@@ -636,4 +669,28 @@ table {
   border: none;
   width: 100%;
   margin-bottom: 1rem;
+}
+
+@media only screen and (min-width: 768px) {
+  .main-page-container {
+    margin-top: 23vh;
+  }
+
+  .random-truck-container {
+    display: flex;
+  }
+
+  .random-truck-image-container img {
+    border-top-right-radius: 0;
+    border-bottom-left-radius: 10px;
+    max-width: 550px;
+  }
+
+  .navbar-mobile {
+    display: none;
+  }
+
+  .navbar-desktop {
+    display: flex;
+  }
 }
