@@ -33,7 +33,7 @@ function geocodeAddress(geocoder, resultsMap, truck) {
         `<div id="title">${truck[0]}</div>` +
         `<div>Rating: ${truck[1]}</div>` +
         `<div>${truck[2]}</div>` +
-        `<div><a id="details" href=${truck[3]}>Show Details</a></div>` +
+        `<div><a id="details" href="/results/${truck[3]}/">Show Details</a></div>` +
         `</div>`;
       const infowindow = new google.maps.InfoWindow({
         content: contentString,
