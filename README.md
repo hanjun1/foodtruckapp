@@ -13,13 +13,26 @@ strEAT Finder brings food lovers and local food trucks together. Search for food
 * [Click here!](https://streatfinder.herokuapp.com/)
 
 ## Technologies Used
+* HTML/CSS/Javascript
 * Python
 * Django
 * Amazon S3
-* Google Maps API
+* Google Geocoding/Maps API
+* PostgreSQL
 * Bootstrap
+
+## Contributors
+
+**Designers:**
+* Samuel Choi
+* Jenn (Jizhen) Jiang
+* Tiziana Bucher
+
+**Developers:**
+* Ryan Kim
+* Matthew Nixon
 
 ## Future Enhancements
 * Search filters
-* Find food trucks near me
-* More refined web client
+* Calculate distance from user's current location and food trucks
+* Cache Geocoding data / add multiple pages for results
