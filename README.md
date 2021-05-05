@@ -4,11 +4,11 @@ strEAT Finder brings food lovers and local food trucks together. Search for food
 
 ## Screenshots
 
-|                  Home Page                  |                Results Page                 |                   Trip Page                 |
+|                  Home Page                  |                Results Page                 |               Results Map Page              |
 | :-----------------------------------------: | :-----------------------------------------: | :-----------------------------------------: |
-| <img src="https://imgur.com/nGH42G6.png"> | <img src="https://imgur.com/xz5FTFe.png"> | <img src="https://imgur.com/4B7MujE.png"> |
-|               Driver New Trip               |           Driver Received Requests          |                Driver Trips                 |
-| <img src="https://imgur.com/Ig6l4aM.png"> | <img src="https://imgur.com/Xh0JE5r.png"> | <img src="https://imgur.com/NdGEeDW.png"> |
+| <img src="https://imgur.com/hPVLvbf.png"> | <img src="https://imgur.com/yM9NjZh.png"> | <img src="https://imgur.com/iDp39iI.png"> |
+|                 Details Page                |            Owner's New Truck Page           |            Owner's Truck List Page          |
+| <img src="https://imgur.com/BlZ5GAa.png"> | <img src="https://imgur.com/nocdBA7.png"> | <img src="https://imgur.com/PzuJdwS.png"> |
 
 
 ## Getting Started
